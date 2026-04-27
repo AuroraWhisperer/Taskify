@@ -122,24 +122,31 @@ http://localhost:3000
 
 ## Configure environmental variables
 
-Create a `.env` file in the project root, then edit it with your own settings.
+The repository does not include a real `.env` file because it contains private credentials. After cloning the project, create a `.env` file in the project root.
 
-Required values:
+The app can connect to either a local MongoDB database or a MongoDB Atlas cloud database. Choose the database by setting `DB_SOURCE`.
+
+For local MongoDB, use this format:
 
 ```env
 PORT=3000
-SESSION_SECRET=your_secret_key_here
+DB_SOURCE=local
 LOCAL_MONGODB_URI=mongodb://localhost:27017/taskify
-CLOUD_MONGODB_URI=mongodb+srv://username:password@cluster.example.mongodb.net/taskify?retryWrites=true&w=majority
+SESSION_SECRET=replace_with_a_long_random_secret
 ```
 
-Optional value for choosing the database source:
+For MongoDB Atlas, use this format:
 
 ```env
-DB_SOURCE=local
+PORT=3000
+DB_SOURCE=cloud
+CLOUD_MONGODB_URI=mongodb+srv://username:password@cluster.example.mongodb.net/taskify?retryWrites=true&w=majority
+SESSION_SECRET=replace_with_a_long_random_secret
 ```
 
-Use `DB_SOURCE=local` for local MongoDB or `DB_SOURCE=cloud` for MongoDB Atlas. If this value is not set, the app asks which database to use when it starts in an interactive terminal.
+Use your own MongoDB username, password, cluster address, and database name. Do not commit `.env` to GitHub.
+
+`DB_SOURCE=local` uses `LOCAL_MONGODB_URI`. `DB_SOURCE=cloud` uses `CLOUD_MONGODB_URI`. If `DB_SOURCE` is not set, the app asks you to choose local or cloud when it starts in an interactive terminal.
 
 ## Security updates
 
