@@ -68,7 +68,6 @@ Folder structure of this project for your reference:
 
 ```text
 src/
-  cloudinary/
   db/
   middleware/
   models/
@@ -91,7 +90,6 @@ docs/
 
 package.json
 package-lock.json
-.env.example
 ```
 
 ## Installation
@@ -124,7 +122,7 @@ http://localhost:3000
 
 ## Configure environmental variables
 
-Create a `.env` file, then edit it with your own settings. You can use `.env.example` as the starting point.
+Create a `.env` file in the project root, then edit it with your own settings.
 
 Required values:
 
@@ -133,7 +131,6 @@ PORT=3000
 SESSION_SECRET=your_secret_key_here
 LOCAL_MONGODB_URI=mongodb://localhost:27017/taskify
 CLOUD_MONGODB_URI=mongodb+srv://username:password@cluster.example.mongodb.net/taskify?retryWrites=true&w=majority
-MONGODB_URI=mongodb://localhost:27017/taskify
 ```
 
 Optional value for choosing the database source:
