@@ -21,6 +21,7 @@
 
         <div class="signup">
           <form method="post" action="/signup">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <label for="chk" aria-hidden="true">Sign up</label>
             <div class="signup-username">
               <input type="text" name="SignUpUsername" placeholder="User name" required="true" />
@@ -38,6 +39,7 @@
         </div>
         <div class="login">
           <form method="post" action="/login">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <label for="chk" aria-hidden="true">Login</label>
             <div class="signup-email">
               <input type="email" name="LoginEmail" placeholder="Enter your email " required="true" />
