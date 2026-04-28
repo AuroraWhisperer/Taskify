@@ -4,7 +4,7 @@
   "description": "Taskify is a task management system for everyone to help you manage your tasks and projects from ideation to delivery.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node test/run-tests.js",
     "start": "node src/app.js",
     "server": "nodemon src/app.js"
   },

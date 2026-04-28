@@ -48,7 +48,7 @@ router.post('/login', loginRateLimiter, asyncHandler(async (req, res) => {
 
     req.session.userId = user._id;
     req.session.username = user.username;
-    loginRateLimiter.reset(req);
+    await loginRateLimiter.reset(req);
     logSecurityEvent('login_succeeded', req, {
         emailHash,
         userId: String(user._id)

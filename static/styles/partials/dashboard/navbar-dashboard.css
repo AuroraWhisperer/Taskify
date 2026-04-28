@@ -80,6 +80,16 @@
   margin: 0;
 }
 
+.dashboard-navbar-delete-password {
+  box-sizing: border-box;
+  width: calc(100% - 24px);
+  margin: 8px 12px 4px;
+  padding: 9px 10px;
+  border: 1px solid #cfcfcf;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
 .dashboard-navbar-dropdown-action {
   background: none;
   border: none;

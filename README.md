@@ -171,3 +171,33 @@ After starting the app, check these basic flows:
 - Try invalid signup values and confirm the form shows an error.
 - Submit a POST request without a CSRF token and confirm it returns `403`.
 - Repeat failed login attempts and confirm the route eventually returns `429`.
+
+## Automated tests
+
+Run the automated security checks:
+
+```bash
+npm test
+```
+
+The current tests cover signup validation, CSRF rejection, rate limiting, session cookie options, and environment validation.
+
+## Security review notes
+
+The security work in this version should be treated as one contribution area: application security hardening. It includes four related sub-areas: CSRF protection, authentication rate limiting, validation/security headers, and centralized error handling with audit logs.
+
+The latest follow-up work also addresses the main items listed in `docs/security.md`:
+
+- Automated tests were added with Node's built-in test runner.
+- Startup validation rejects missing, weak, or default `SESSION_SECRET` values.
+- Session cookies use `httpOnly`, `sameSite: "lax"`, production-only `secure`, and a 24-hour expiry.
+- Rate limiting uses a MongoDB-backed shared store by default.
+- Account deletion requires password re-authentication.
+
+Remaining production review areas:
+
+- Keep `.env` private and use `.env.example` as the committed template.
+- Consider Redis for high-traffic rate limiting.
+- Consider `helmet` for standard security headers while keeping the custom CSP strict.
+
+See [docs/security.md](docs/security.md) for the detailed explanation and suggested next steps.

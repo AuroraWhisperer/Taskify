@@ -1,23 +1,23 @@
-# Security Notes
+# Security Documentation
 
-These notes describe the security-related changes in this branch. They are meant to help someone review the code without having to trace every route first.
+This document describes the security improvements implemented in the application, focusing on authentication and account management security hardening.
 
-## Summary
+## Overview
 
-The changes focus on four areas:
+The security enhancements address four key areas of application security:
 
-- CSRF protection for forms that change server state.
-- Rate limiting for login and signup.
-- Server-side validation and browser security headers.
-- Centralized error handling with audit logs.
+1. **CSRF Protection** - Prevents cross-site request forgery attacks on state-changing operations
+2. **Rate Limiting** - Protects against brute-force attacks on authentication endpoints
+3. **Input Validation & Security Headers** - Mitigates XSS risks and enforces secure input handling
+4. **Error Handling & Audit Logging** - Provides centralized error management with privacy-aware audit trails
 
-This is still a coursework-sized implementation. The rate limiter stores counters in memory, so it is fine for local testing and a single Node process, but it would need Redis or another shared store before running behind multiple server instances.
+**Note:** The current rate limiter uses MongoDB-backed shared storage by default, so multiple Node.js instances using the same database share the same counters. A memory store is still available for automated tests and small local experiments.
 
-## CSRF Protection
+## 1. CSRF Protection
 
-The app now creates one CSRF token per session and exposes it to EJS views through `res.locals.csrfToken`.
+The application generates one CSRF token per session and exposes it to EJS views through `res.locals.csrfToken`.
 
-Files involved:
+**Implementation files:**
 
 - `src/middleware/csrf.js`
 - `src/app.js`
@@ -26,44 +26,50 @@ Files involved:
 - `views/partials/dashboard/dashboard-sidebar.ejs`
 - `views/partials/dashboard/navbar-dashboard.ejs`
 
-What changed:
+**Key changes:**
 
-- Signup and login forms include a hidden `_csrf` field.
-- Logout now uses `POST /logout` instead of a GET link.
-- Account deletion uses a POST form with a CSRF token.
-- Unsafe methods without a valid token return `403`.
-- Token comparison uses `crypto.timingSafeEqual`.
+- Signup and login forms include a hidden `_csrf` field
+- Logout uses `POST /logout` instead of a GET link
+- Account deletion uses a POST form with CSRF token
+- Requests without valid tokens return `403`
+- Token comparison uses `crypto.timingSafeEqual` for timing-attack resistance
 
-Quick check:
+**Verification:**
 
 ```bash
 curl -X POST http://localhost:3000/logout
 ```
 
-The request should fail with `403` because it does not include the session token.
+This request should fail with `403` due to missing session token.
 
-## Rate Limiting
+## 2. Rate Limiting
 
-Authentication routes now use a small route-level limiter.
+Authentication routes implement route-level rate limiting to prevent brute-force attacks.
 
-Files involved:
+**Implementation files:**
 
 - `src/middleware/rateLimit.js`
+- `src/models/rateLimit.model.js`
 - `src/routes/login.route.js`
 - `src/routes/signup.route.js`
 
-Current limits:
+**Current limits:**
 
-- `POST /login`: 15 attempts per 15 minutes.
-- `POST /signup`: 10 attempts per 30 minutes.
+- `POST /login`: 15 attempts per 15 minutes
+- `POST /signup`: 10 attempts per 30 minutes
 
-The limiter keys requests by IP, HTTP method, and route path. A successful login resets that login counter, which avoids locking a user out after they finally enter the correct password. When the limit is hit, the route returns `429` and sets a `Retry-After` header.
+**Behavior:**
 
-## Validation And Headers
+- Requests are keyed by IP address, HTTP method, and route path
+- Counters are stored in MongoDB with an expiry time for the current rate-limit window
+- Successful login resets the login counter to avoid lockout after correct password entry
+- When limit is exceeded, returns `429` status with `Retry-After` header
 
-Signup validation was moved into a utility so the route is not doing all checks inline.
+## 3. Input Validation & Security Headers
 
-Files involved:
+Server-side validation has been centralized and security headers are applied to all responses.
+
+**Implementation files:**
 
 - `src/utilities/validation.js`
 - `src/models/user.model.js`
@@ -71,13 +77,13 @@ Files involved:
 - `static/js/dashboard-navbar.js`
 - `views/partials/dashboard/navbar-dashboard.ejs`
 
-Validation rules:
+**Validation rules:**
 
-- Username: 3 to 30 characters; letters, numbers, spaces, underscores, and hyphens only.
-- Email: normalized to lowercase and checked against a basic email pattern.
-- Password: at least 8 characters, includes a letter and a number, no control characters, and no more than 72 bytes for bcrypt.
+- **Username**: 3-30 characters; letters, numbers, spaces, underscores, and hyphens only
+- **Email**: normalized to lowercase and validated against email pattern
+- **Password**: minimum 8 characters, must include letter and number, no control characters, maximum 72 bytes (bcrypt limit)
 
-The app also sets these response headers:
+**Security headers applied:**
 
 ```text
 Content-Security-Policy
@@ -87,13 +93,13 @@ Referrer-Policy
 Permissions-Policy
 ```
 
-Inline dashboard JavaScript was moved into `static/js/dashboard-navbar.js` so the CSP can block inline scripts.
+**Note:** Inline dashboard JavaScript was moved to `static/js/dashboard-navbar.js` to comply with CSP restrictions on inline scripts.
 
-## Error Handling And Audit Logs
+## 4. Error Handling & Audit Logging
 
-Errors now go through shared middleware instead of each route deciding its own fallback behavior.
+Centralized error handling and privacy-aware audit logging provide consistent error management and security event tracking.
 
-Files involved:
+**Implementation files:**
 
 - `src/middleware/errorHandler.js`
 - `src/utilities/asyncHandler.js`
@@ -102,9 +108,13 @@ Files involved:
 - `src/routes/login.route.js`
 - `src/routes/signup.route.js`
 
-The audit logger writes JSON-style events and avoids storing raw secrets. Fields matching names such as password, token, secret, cookie, csrf, authorization, or session are redacted. Email and session identifiers are logged as hashes when they are needed for debugging.
+**Audit logging features:**
 
-Logged events include:
+- Writes JSON-formatted security events
+- Automatically redacts sensitive fields (password, token, secret, cookie, csrf, authorization, session)
+- Hashes email and session identifiers for debugging while preserving privacy
+
+**Logged events:**
 
 - `login_succeeded`
 - `login_failed`
@@ -118,20 +128,59 @@ Logged events include:
 - `account_deletion_failed`
 - `route_error`
 
-## Manual Review Checklist
+## Testing Checklist
 
-- Start the app with `npm start`.
-- Check that signup and login pages contain hidden `_csrf` inputs.
-- Submit a POST request without `_csrf` and confirm it returns `403`.
-- Try repeated failed logins and confirm the limit eventually returns `429`.
-- Try invalid signup values and confirm the form rejects them.
-- Check a normal page response and confirm the security headers are present.
-- Confirm dashboard dropdown JavaScript still works after moving it to `static/js/dashboard-navbar.js`.
-- Check the console logs after login, signup, logout, and failed requests.
+- Start the application with `npm start`
+- Verify signup and login pages contain hidden `_csrf` inputs
+- Submit POST request without `_csrf` and confirm `403` response
+- Attempt repeated failed logins and verify `429` response after limit
+- Test invalid signup values and confirm validation rejection
+- Inspect response headers and verify security headers are present
+- Verify dashboard dropdown JavaScript functionality after refactoring
+- Check console logs for login, signup, logout, and failed request events
 
-## Remaining Work
+## Implemented Follow-Up Improvements
 
-- Move rate limit state out of memory before deploying across multiple Node processes.
-- Add automated tests for CSRF failures, rate limits, and signup validation.
-- Review session cookie settings for production, especially `secure` and `sameSite`.
-- Consider account lockout or 2FA only if the project scope requires it.
+The final follow-up items have been implemented in this version:
+
+1. Automated tests were added for validation, CSRF rejection, rate limiting, session cookie options, and environment validation.
+2. Session cookie options were hardened with `httpOnly`, `sameSite: "lax"`, production-only `secure`, and a 24-hour expiry.
+3. Startup environment checks now reject missing, weak, or default `SESSION_SECRET` values and missing `MONGODB_URI`.
+4. Rate-limit counters now use a MongoDB-backed shared store by default, with a memory store kept for tests.
+5. Account deletion now requires password re-authentication before the user record is deleted.
+
+Run the automated checks with:
+
+```bash
+npm test
+```
+
+## Security Review Notes
+
+These notes are included to explain the security design during coursework review. They are not unfinished tasks.
+
+### 1. Rate Limiter Store Choice
+
+The default limiter now stores counters in MongoDB, so multiple Node.js instances that share the same database also share rate-limit state. This is suitable for the current coursework-sized app.
+
+### 2. Environment Secrets Must Stay Private
+
+The repository should never commit a real `.env` file. `.gitignore` excludes `.env`, and `.env.example` is the committed template.
+
+Use a long random `SESSION_SECRET`. If a MongoDB Atlas password or session secret has already been shared or exposed, rotate it.
+
+### 3. Validation Rules Can Be Expanded
+
+Current validation provides useful baseline protection:
+
+- Username length and allowed characters
+- Email normalization and pattern validation
+- Password length, bcrypt byte-limit, letter and number requirements
+
+### 4. Account Deletion Confirmation
+
+Account deletion is protected by login status, CSRF protection, and server-side password re-authentication. Failed deletion attempts are logged without storing the raw password.
+
+### 5. Security Headers Are Manual
+
+The project sets important security headers manually, including a strict Content Security Policy. If the CSP is changed later, the dashboard should be retested to confirm required scripts and styles still load correctly.

@@ -42,6 +42,7 @@
                   </form>
                   <form method="post" action="/delete-account" class="dashboard-navbar-dropdown-form dashboard-navbar-delete-account-form">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <input type="password" name="deletePassword" class="dashboard-navbar-delete-password" placeholder="Confirm password" autocomplete="current-password" required />
                     <button type="submit" class="dashboard-navbar-dropdown-action dashboard-navbar-delete-action">Delete Account</button>
                   </form>
                 </div>
