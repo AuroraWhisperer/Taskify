@@ -184,7 +184,11 @@ The current tests cover signup validation, CSRF rejection, rate limiting, sessio
 
 ## Security review notes
 
-The security work in this version should be treated as one contribution area: application security hardening. It includes four related sub-areas: CSRF protection, authentication rate limiting, validation/security headers, and centralized error handling with audit logs.
+For coursework reporting, the security work in this version should be treated as one specific deficiency:
+
+**Weak protection for account actions and related security controls.**
+
+It includes several related implementation controls: CSRF protection, login/signup rate limiting, centralized input validation, security headers, centralized error handling, audit logs, hardened session cookies, and password re-authentication for account deletion. These controls should be used as evidence for one security deficiency, not split into several separate deficiencies.
 
 The latest follow-up work also addresses the main items listed in `docs/security.md`:
 
