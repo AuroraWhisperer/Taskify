@@ -77,12 +77,15 @@
             </li>
 
             <li class="sidebar-list">
-              <a href="/logout">
+              <form method="post" action="/logout" class="sidebar-logout-form">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <button type="submit" class="sidebar-logout-button">
                 <span class="sidebar-icon">
                   <i class="fa-solid fa-right-from-bracket"></i>
                 </span>
                 <span class="sidebar-name">Log out</span>
-              </a>
+                </button>
+              </form>
             </li>
           </div>
         </ul>

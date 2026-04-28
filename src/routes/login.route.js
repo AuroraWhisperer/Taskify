@@ -2,32 +2,58 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
+const createRateLimiter = require('../middleware/rateLimit');
+const asyncHandler = require('../utilities/asyncHandler');
+const { hashIdentifier, logSecurityEvent } = require('../utilities/auditLogger');
+const { getPassword, normalizeEmail } = require('../utilities/validation');
 
-router.post('/login', async (req, res) => {
-    const { LoginEmail, LoginPassword } = req.body;
-
-    if (!LoginEmail || !LoginPassword) {
-        return res.status(400).render('signup', { error: '请输入邮箱和密码' });
-    }
-
-    try {
-        const user = await User.findOne({ email: LoginEmail });
-        if (!user) {
-            return res.status(400).render('signup', { error: '邮箱或密码错误' });
-        }
-
-        const isMatch = await bcrypt.compare(LoginPassword, user.password);
-        if (!isMatch) {
-            return res.status(400).render('signup', { error: '邮箱或密码错误' });
-        }
-
-        req.session.userId = user._id;
-        req.session.username = user.username;
-        res.redirect('/dashboard');
-    } catch (err) {
-        console.error(err);
-        res.status(500).render('signup', { error: '登录失败，请稍后重试' });
-    }
+const loginRateLimiter = createRateLimiter({
+    windowMs: 15 * 60 * 1000,
+    maxAttempts: 15,
+    message: 'Too many login attempts. Please wait 15 minutes and try again.'
 });
+
+router.post('/login', loginRateLimiter, asyncHandler(async (req, res) => {
+    const { LoginEmail, LoginPassword } = req.body;
+    const email = normalizeEmail(LoginEmail);
+    const password = getPassword(LoginPassword);
+    const emailHash = hashIdentifier(email);
+
+    if (!email || !password) {
+        logSecurityEvent('login_failed', req, {
+            reason: 'missing_credentials',
+            emailHash
+        });
+        return res.status(400).render('signup', { error: 'Please enter both email and password.' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+        logSecurityEvent('login_failed', req, {
+            reason: 'invalid_credentials',
+            emailHash
+        });
+        return res.status(400).render('signup', { error: 'Email or password is incorrect.' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+        logSecurityEvent('login_failed', req, {
+            reason: 'invalid_credentials',
+            emailHash,
+            userId: String(user._id)
+        });
+        return res.status(400).render('signup', { error: 'Email or password is incorrect.' });
+    }
+
+    req.session.userId = user._id;
+    req.session.username = user.username;
+    await loginRateLimiter.reset(req);
+    logSecurityEvent('login_succeeded', req, {
+        emailHash,
+        userId: String(user._id)
+    });
+    res.redirect('/dashboard');
+}));
 
 module.exports = router;
