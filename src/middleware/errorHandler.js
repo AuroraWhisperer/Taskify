@@ -24,7 +24,7 @@ function renderGenericResponse(req, res, statusCode) {
     }
 
     if (wantsHtml(req) && (req.path === "/login" || req.path === "/signup")) {
-        return res.status(statusCode).render("signup", {
+        return res.status(statusCode).render("signup.ejs", {
             error: "The request could not be completed. Please try again later."
         });
     }

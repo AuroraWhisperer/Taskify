@@ -28,7 +28,7 @@ router.post('/signup', signupIpRateLimiter, signupEmailRateLimiter, asyncHandler
 
     if (error) {
         logSecurityEvent('signup_rejected', req, { reason: 'validation_failed' });
-        return res.status(400).render('signup', { error });
+        return res.status(400).render('signup.ejs', { error });
     }
 
     const emailHash = hashIdentifier(values.email);
@@ -38,7 +38,7 @@ router.post('/signup', signupIpRateLimiter, signupEmailRateLimiter, asyncHandler
             reason: 'duplicate_email',
             emailHash
         });
-        return res.status(400).render('signup', {
+        return res.status(400).render('signup.ejs', {
             error: 'Signup could not be completed. Please check your details and try again.'
         });
     }

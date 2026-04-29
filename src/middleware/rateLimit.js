@@ -118,7 +118,7 @@ function createRateLimiter(options = {}) {
                     limit: maxAttempts,
                     windowMs
                 });
-                return res.status(429).render("signup", { error: message });
+                return res.status(429).render("signup.ejs", { error: message });
             }
 
             return next();

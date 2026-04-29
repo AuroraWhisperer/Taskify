@@ -5,6 +5,7 @@ const express = require("express");
 const session = require("express-session");
 
 const csrfProtection = require("../src/middleware/csrf");
+const { errorHandler } = require("../src/middleware/errorHandler");
 const createRateLimiter = require("../src/middleware/rateLimit");
 const { MemoryRateLimitStore } = createRateLimiter;
 
@@ -147,6 +148,34 @@ test("rate limiter returns 429 after repeated attempts", async () => {
     } finally {
         console.warn = originalWarn;
     }
+});
+
+test("signup error responses render the signup page", async () => {
+    const app = express();
+
+    app.set("view engine", "ejs");
+    app.set("views", path.join(__dirname, "../views"));
+    app.use((req, res, next) => {
+        res.locals.csrfToken = "test_csrf_token";
+        next();
+    });
+    app.get("/signup", (req, res, next) => {
+        const err = new Error("test failure");
+        err.status = 500;
+        next(err);
+    });
+    app.use(errorHandler);
+
+    await withServer(app, async (baseUrl) => {
+        const response = await fetch(`${baseUrl}/signup`, {
+            headers: { Accept: "text/html" }
+        });
+        const html = await response.text();
+
+        assert.equal(response.status, 500);
+        assert.match(html, /The request could not be completed/);
+        assert.match(html, /Sign up/);
+    });
 });
 
 test("rate limiter can use account-specific keys", async () => {
