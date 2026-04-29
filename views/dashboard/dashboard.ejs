@@ -23,6 +23,9 @@
     </div>
     <div class="dashboard-nav-cards-section">
       <%-include("../partials/dashboard/navbar-dashboard.ejs") %>
+      <% if (typeof error !== "undefined" && error) { %>
+        <div class="dashboard-alert dashboard-alert-error"><%= error %></div>
+      <% } %>
       <%-include("../partials/dashboard/dashboard-cards.ejs") %>
     </div>
   </div>

@@ -1,232 +1,207 @@
-
-
 <div align="center">
-  <h1>Welcome to Taskify 👋💻</h1>
-  <h3>Live Website for Taskify : <a href="#">Click Here!</a></h3>
+  <h1>Welcome to Taskify</h1>
+  <h3>Task management system built with Node.js, Express, EJS, and MongoDB</h3>
 </div>
 
 <br>
 
 <p align="center">
-<a href="https://github.com/DSCKGEC/Taskify"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat&logo=github"></a> 
-<a href="https://github.com/DSCKGEC/Taskify"><img src="https://img.shields.io/badge/Open%20Source-%F0%9F%A4%8D-Green"></a> 
-<a href="https://github.com/DSCKGEC/Taskify"><img src="https://img.shields.io/static/v1.svg?label=Contributions&message=Welcome&color=0059b3&style=flat-square"></a>
-<a href="https://github.com/DSCKGEC/Taskify/graphs/contributors"><img src="https://img.shields.io/github/contributors-anon/sudip-101/Taskify"></a>
-<a href="https://github.com/DSCKGEC/Taskify"><img src="https://img.shields.io/maintenance/yes/2022"></a>
-</p> 
+<img src="https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white">
+<img src="https://img.shields.io/badge/Express.js-000000?style=flat&logo=express&logoColor=white">
+<img src="https://img.shields.io/badge/MongoDB-4EA94B?style=flat&logo=mongodb&logoColor=white">
+<img src="https://img.shields.io/badge/EJS-B4CA65?style=flat">
+</p>
 
+## Repository
 
-##  Repository
+<h3>Taskify</h3>
 
-<h3> Taskify </h3>
+Taskify is a task management system for everyday use. It is designed to help users create an account, sign in, and access a protected dashboard for managing their work.
 
-It is a task management system for everyone. It is designed to help you manage your tasks and projects from ideation to delivery. This task manager helps to bring in only the necessary parts – without all the annoying clutter.
+This version also includes several security updates, including CSRF protection, rate limiting on authentication routes, stricter input validation, security headers, and centralized error handling.
 
+## Project Goal
 
-##  Join Here
- Join us to come up with a real-time platform to tackle the solution of needs of the individuals who are in situations of struggling with task management.
- We are building this app to ensure that no one suffers due to lack of awareness and get the required help when time matters a lot. Lets make this workflow more efficient and valuable to the community for their livelihood with taskify. 
+The goal of this project is to provide a simple task management web application with a clear login and dashboard flow. The project is kept small enough for coursework review, while still showing the main parts of a typical Express and MongoDB application.
 
+## Tech Stacks
 
-##  Tech Stacks
-
-<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"><img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"><img src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white"><img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E"><img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white"><img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white"><img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white"><img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white">
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 
 <br>
 
 ### Node
 
--   #### Node installation on Windows
+- #### Node installation on Windows
 
-    Just go on [official Node.js website](https://nodejs.org/) and download the installer.
-    Also, be sure to have `git` available in your PATH, `npm` might need it (You can find git [here](https://git-scm.com/)).
+  Go to the [official Node.js website](https://nodejs.org/) and download the installer.
+  After installation, make sure `node` and `npm` are available in your terminal.
+- #### Node installation on Ubuntu
 
--   #### Node installation on Ubuntu
-
-    You can install nodejs and npm easily with apt install, just run the following commands.
-
-        $ sudo apt install nodejs
-        $ sudo apt install npm
-
--   #### Other Operating Systems
-    You can find more information about the installation on the [official Node.js website](https://nodejs.org/) and the [official NPM website](https://npmjs.org/).
-
-If the installation was successful, you should be able to run the following command.
-
-    $ node --version
-    v8.11.3
-
-    $ npm --version
-    6.1.0
-
-If you need to update `npm`, you can make it using `npm`! Cool right? After running the following command, just open again the command line and be happy.
-
-    $ npm install npm -g
+  You can install Node.js and npm with apt:
 
 
+  ```bash
+  sudo apt install nodejs
+  sudo apt install npm
+  ```
+- #### Other Operating Systems
 
-If you want to work on this unique project and share it with the world, you can do that here. 
-Go through the contributing guidelines [here](https://github.com/DSCKGEC/Taskify/blob/main/contributing.md).
+  More installation details are available on the [official Node.js website](https://nodejs.org/) and the [official npm website](https://npmjs.org/).
 
-Subsequently, also go through the GitHub documentation on [creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+If the installation was successful, these commands should print version numbers:
 
-
-
-##  Templates to Follow
-
-- [Feature request](https://github.com/DSCKGEC/Taskify/blob/main/.github/ISSUE_TEMPLATE/feature_request.md)
-- [Bug Report](https://github.com/DSCKGEC/Taskify/blob/main/.github/ISSUE_TEMPLATE/bug_report.md)
-- [Pull Request](https://github.com/DSCKGEC/Taskify/blob/main/.github/PULL_REQUEST_TEMPLATE.md)
-
-**Note** : One should follow these templates while creating a new issue or pull request.
-
-
-
-## Folder Structure 
-
-Folder structure of this project for your reference 
-
-```
-├── src
-│   ├── cloudinary
-│   ├── db
-│   ├── middleware
-│   ├── models
-│   ├── routes
-│   ├── app.js
-│   
-├── static
-│   ├── assets
-│   ├── js
-│   ├── styles
-│   │   ├── partials
-|   ...
-│   
-├── views
-│   │   ├── partials
-|   ...
-|
-├── package.json
-├── package-lock.json 
-└── .gitignore
-└── .env
+```bash
+node --version
+npm --version
 ```
 
-##  Workflow:
+## Folder Structure
 
-- Fork the repository
+Folder structure of this project for your reference:
 
-- Clone your forked repository using terminal or gitbash.
+```text
+src/
+  db/
+  middleware/
+  models/
+  routes/
+  utilities/
+  app.js
 
-- Make changes to the cloned repository
+static/
+  assets/
+  js/
+  styles/
+    partials/
 
-- Add, Commit and Push
+views/
+  dashboard/
+  partials/
 
-- Then in GitHub, in your cloned repository, find the option to make a pull request. 
+docs/
+  security.md
 
-**NOTE** : For more details <a href="https://github.com/DSCKGEC/Taskify/blob/main/contributing.md">Click Here!</a>
+package.json
+package-lock.json
+```
 
 ## Installation
 
-    $ npm install
+Install the project dependencies:
+
+```bash
+npm install
+```
 
 ## Running the project
 
-    $ npm start
+Start the application:
 
+```bash
+npm start
+```
+
+For development with nodemon:
+
+```bash
+npm run server
+```
+
+The app runs at:
+
+```text
+http://localhost:3000
+```
 
 ## Configure environmental variables
 
-Create a `.env` file then edit it with your settings. You will need:
+The repository does not include a real `.env` file because it contains private credentials. After cloning the project, create a `.env` file in the project root.
 
--   ENV=development
--   PORT=[your_port]
--   MONGO_URI=[your_mongo_uri]
--   JWT_SECRET=[your_jwt_secret]
--   EXPIRY=[your_jwt_expiry_time]
--   SECRET=[your_secret_for_mongostore]
--   CLOUDINARY_CLOUD_NAME=[your_cloudinary_cloud_name]
--   CLOUDINARY_KEY=[your_cloudinary_key]
--   CLOUDINARY_SECRET=[your_cloudinary_secret]
--   X_RAPIDAPI_HOST=[your_rapidapi_sendgrid_host]
--   X_RAPIDAPI_KEY=[your_rapiapi_sendgrid_key]
--   SENDGRID_EMAIL=[no-reply@your_domain.com]
-  
-<br>
+The app can connect to either a local MongoDB database or a MongoDB Atlas cloud database. Choose the database by setting `DB_SOURCE`.
 
-> console.log ( " Start contributing for Taskify " );
+For local MongoDB, use this format:
 
+```env
+PORT=3000
+DB_SOURCE=local
+LOCAL_MONGODB_URI=mongodb://localhost:27017/taskify
+SESSION_SECRET=replace_with_a_long_random_secret
+```
 
-## Open Source Programs
+For MongoDB Atlas, use this format:
 
-<table>
-<tr>
- <td align="center">
-<a href="#"><img src="" width=100px height=100px /><br /><sub><b>KGEC Summer Of Code</b></sub></a>
- </td>
-</tr>
-</table>
+```env
+PORT=3000
+DB_SOURCE=cloud
+CLOUD_MONGODB_URI=mongodb+srv://username:password@cluster.example.mongodb.net/taskify?retryWrites=true&w=majority
+SESSION_SECRET=replace_with_a_long_random_secret
+```
 
+Use your own MongoDB username, password, cluster address, and database name. Do not commit `.env` to GitHub.
 
-##  Valuable Contributors
-Special thanks goes to all of the mentees who made a choice to make an impact. Contributions of any kind are welcome!🚀 
+`DB_SOURCE=local` uses `LOCAL_MONGODB_URI`. `DB_SOURCE=cloud` uses `CLOUD_MONGODB_URI`. If `DB_SOURCE` is not set, the app asks you to choose local or cloud when it starts in an interactive terminal.
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
+## Security updates
 
-<a href="https://github.com/DSCKGEC/Taskify/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=DSCKGEC/Taskify" />
-</a>
+This version includes the following security-related changes:
 
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+- CSRF tokens for signup, login, logout, and account deletion forms.
+- Logout changed from a GET link to a POST request.
+- Rate limiting on login and signup routes.
+- Server-side validation for username, email, and password.
+- Security headers, including Content Security Policy.
+- Centralized error handling and audit-style logging.
 
+For more details, see [docs/security.md](docs/security.md).
 
-##  Code Of Conduct
+## Manual checks
 
-You can find our Code of Conduct [here](https://github.com/DSCKGEC/Taskify/blob/main/code_of_conduct.md).
+After starting the app, check these basic flows:
 
+- Sign up with a valid username, email, and password.
+- Log out from the dashboard.
+- Log in again with the same account.
+- Try invalid signup values and confirm the form shows an error.
+- Submit a POST request without a CSRF token and confirm it returns `403`.
+- Repeat failed login attempts and confirm the route eventually returns `429`.
 
-##  License
+## Automated tests
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/DSCKGEC/Taskify/blob/main/LICENSE) file for details.
+Run the automated security checks:
 
+```bash
+npm test
+```
 
-##  Project Admin
+The current tests cover signup validation, CSRF rejection, rate limiting, session cookie options, and environment validation.
 
-<a href="https://github.com/sudip-101">
-Sudip Maiti</a>
-<br>
+## Security review notes
 
-##  Give this Project a Star
+For coursework reporting, the security work in this version should be treated as one specific deficiency:
 
-If you liked working on this project, do ⭐ and share this repository.
+**Weak protection for account actions and related security controls.**
 
-🎉 🎊 😃 Happy Contributing 😃 🎊 🎉
-<br>
+It includes several related implementation controls: CSRF protection, login/signup rate limiting, centralized input validation, security headers, centralized error handling, audit logs, hardened session cookies, and password re-authentication for account deletion. These controls should be used as evidence for one security deficiency, not split into several separate deficiencies.
 
-<!-- ##  Contact Me
+The latest follow-up work also addresses the main items listed in `docs/security.md`:
 
-If you want to contact me, you can reach me through below handles.
+- Automated tests were added with Node's built-in test runner.
+- Startup validation rejects missing, weak, or default `SESSION_SECRET` values.
+- Session cookies use `httpOnly`, `sameSite: "lax"`, production-only `secure`, and a 24-hour expiry.
+- Rate limiting uses a MongoDB-backed shared store by default.
+- Account deletion requires password re-authentication.
 
-<a href="mailto:hazrasoujanya@gmail.com">
-<img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white">
-</a>
-<a href="https://www.linkedin.com/in/soujanyahazra/">
-<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white">
-</a>
-<a href="https://www.instagram.com/soujanya_hazra/">
-<img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white">
-</a>
-<a href="https://discordapp.com/users/791383804354887741">
-<img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
-</a>
+Remaining production review areas:
 
-<br>
+- Keep `.env` private and use `.env.example` as the committed template.
+- Consider Redis for high-traffic rate limiting.
+- Consider `helmet` for standard security headers while keeping the custom CSP strict.
 
-© 2022 Soujanya Hazra
-
-
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/built-by-developers.svg)](https://forthebadge.com)  -->
+See [docs/security.md](docs/security.md) for the detailed explanation and suggested next steps.

@@ -28,7 +28,10 @@
         <div class="nav-buttons">
           <% if (username) { %>
             <a href="/dashboard" class="btn1 nav-btn">Dashboard</a>
-            <a href="/logout" class="btn2 nav-btn">Log Out</a>
+            <form method="post" action="/logout" class="nav-logout-form">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button type="submit" class="btn2 nav-btn">Log Out</button>
+            </form>
           <% } else { %>
             <a href="/signup" class="btn1 nav-btn">Sign Up</a>
             <a href="/signup" class="btn2 nav-btn">Log In</a>

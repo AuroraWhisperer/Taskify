@@ -17,34 +17,39 @@
     <div class="dashboard-navbar-container">
       <nav class="dashboard-navbar-dashboard-navbar">
           <form action="#" class="dashboard-navbar-search-bar">
-            <button type="submit">
+            <button type="submit" aria-label="Search">
               <i class="fas fa-search"></i>
             </button>
-            <input type="text" placeholder="Search" />
+            <input type="text" placeholder="Search" aria-label="Search" />
           </form>
         <div class="dashboard-navbar-dashboard-links">
           <ul class="dashboard-navbar-dashboard-navbar-links">
             <li>
-              <a href="#"><i class="fa-regular fa-circle-question"></i></a>
+              <a href="#" aria-label="Help"><i class="fa-regular fa-circle-question"></i></a>
             </li>
             <li>
-              <a href="#" class="dashboard-navbar-bell-icon"><i class="far fa-bell"></i></a>
+              <a href="#" class="dashboard-navbar-bell-icon" aria-label="Notifications"><i class="far fa-bell"></i></a>
             </li>
             <li>
               <div class="dashboard-navbar-dropdown">
-                <button onclick="myFunction()" class="dashboard-navbar-dropbtn"><%= username %> <i class="fa-solid fa-chevron-down"></i></button>
+                <button type="button" class="dashboard-navbar-dropbtn" aria-haspopup="true" aria-expanded="false"><%= username %> <i class="fa-solid fa-chevron-down"></i></button>
 
                 <div id="dashboard-navbar-myDropdown" class="dashboard-navbar-dropdown-content">
-                  <a href="#" style="font-size: 16px;">Profile</a>
-                  <a href="/logout" style="font-size: 16px;">Log Out</a>
-                  <form method="post" action="/delete-account" onsubmit="return confirm('确认注销账户？此操作不可撤销。')">
-                    <button type="submit" style="font-size: 16px; color: #dc3545; background: none; border: none; cursor: pointer; padding: 12px 16px; width: 100%; text-align: left;">Delete Account</button>
+                  <a href="#" class="dashboard-navbar-dropdown-link">Profile</a>
+                  <form method="post" action="/logout" class="dashboard-navbar-dropdown-form">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <button type="submit" class="dashboard-navbar-dropdown-action">Log Out</button>
+                  </form>
+                  <form method="post" action="/delete-account" class="dashboard-navbar-dropdown-form dashboard-navbar-delete-account-form">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <input type="password" name="deletePassword" class="dashboard-navbar-delete-password" placeholder="Confirm password" aria-label="Confirm password" autocomplete="current-password" required />
+                    <button type="submit" class="dashboard-navbar-dropdown-action dashboard-navbar-delete-action">Delete Account</button>
                   </form>
                 </div>
               </div>
             </li>
             <li>
-              <a href="#"><i class="fa-regular fa-user dashboard-navbar-link-img dashboard-navbar-profile-icon"></i></a>
+              <a href="#" aria-label="Profile"><i class="fa-regular fa-user dashboard-navbar-link-img dashboard-navbar-profile-icon"></i></a>
             </li>
             
           </ul>
@@ -53,25 +58,5 @@
     </div>
   </header>
 </body>
-<script>
-/* When the user clicks on the button, 
-toggle between hiding and showing the dropdown content */
-function myFunction() {
-  document.getElementById("dashboard-navbar-myDropdown").classList.toggle("dashboard-navbar-show");
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dashboard-navbar-dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dashboard-navbar-dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('dashboard-navbar-show')) {
-        openDropdown.classList.remove('dashboard-navbar-show');
-      }
-    }
-  }
-}
-</script>
+<script src="/static/js/dashboard-navbar.js" defer></script>
 </html>

@@ -102,6 +102,13 @@ a .nav-title:hover {
   display: flex;
   gap: 24px;
 }
+.nav-logout-form {
+  margin: 0;
+}
+.nav-logout-form button {
+  border: 0;
+  font-family: inherit;
+}
 .nav-btn {
   cursor: pointer;
   color: var(--clr-main-bg);

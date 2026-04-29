@@ -118,6 +118,10 @@
   padding: 0 10px;
 }
 
+.footer-link-bordered {
+  border-right: 2px solid black;
+}
+
 .footer-copyright ul li a {
   text-decoration: none;
   
