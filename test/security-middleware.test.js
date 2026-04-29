@@ -148,3 +148,58 @@ test("rate limiter returns 429 after repeated attempts", async () => {
         console.warn = originalWarn;
     }
 });
+
+test("rate limiter can use account-specific keys", async () => {
+    const app = express();
+    const limiter = createRateLimiter({
+        windowMs: 60 * 1000,
+        maxAttempts: 1,
+        message: "Limited",
+        store: new MemoryRateLimitStore(),
+        keyGenerator: (req) => `account:${req.body.email}`
+    });
+
+    app.set("view engine", "ejs");
+    app.set("views", path.join(__dirname, "../views"));
+    app.use(express.urlencoded({ extended: false }));
+    app.use((req, res, next) => {
+        res.locals.csrfToken = "test_csrf_token";
+        next();
+    });
+    app.post("/login", limiter, (req, res) => {
+        res.status(400).send("invalid");
+    });
+
+    const originalWarn = console.warn;
+    console.warn = () => {};
+
+    try {
+        await withServer(app, async (baseUrl) => {
+            const headers = { "Content-Type": "application/x-www-form-urlencoded" };
+            const first = await fetch(`${baseUrl}/login`, {
+                method: "POST",
+                headers,
+                body: "email=alice%40example.com"
+            });
+            const second = await fetch(`${baseUrl}/login`, {
+                method: "POST",
+                headers,
+                body: "email=alice%40example.com"
+            });
+            const third = await fetch(`${baseUrl}/login`, {
+                method: "POST",
+                headers,
+                body: "email=bob%40example.com"
+            });
+
+            assert.equal(first.status, 400);
+            assert.equal(second.status, 429);
+            assert.equal(third.status, 400);
+            await first.text();
+            await second.text();
+            await third.text();
+        });
+    } finally {
+        console.warn = originalWarn;
+    }
+});

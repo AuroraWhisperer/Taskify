@@ -4,15 +4,26 @@ const User = require('../models/user.model');
 const createRateLimiter = require('../middleware/rateLimit');
 const asyncHandler = require('../utilities/asyncHandler');
 const { hashIdentifier, logSecurityEvent } = require('../utilities/auditLogger');
-const { validateSignupInput } = require('../utilities/validation');
+const { normalizeEmail, validateSignupInput } = require('../utilities/validation');
+const { regenerateSession } = require('../utilities/session');
 
-const signupRateLimiter = createRateLimiter({
+const signupIpRateLimiter = createRateLimiter({
     windowMs: 30 * 60 * 1000,
     maxAttempts: 10,
     message: 'Too many signup attempts. Please wait 30 minutes and try again.'
 });
 
-router.post('/signup', signupRateLimiter, asyncHandler(async (req, res) => {
+const signupEmailRateLimiter = createRateLimiter({
+    windowMs: 30 * 60 * 1000,
+    maxAttempts: 5,
+    message: 'Too many signup attempts for this email. Please wait 30 minutes and try again.',
+    keyGenerator: (req) => {
+        const email = normalizeEmail(req.body?.SignUpEmail);
+        return email ? `signup-email:${hashIdentifier(email)}` : null;
+    }
+});
+
+router.post('/signup', signupIpRateLimiter, signupEmailRateLimiter, asyncHandler(async (req, res) => {
     const { error, values } = validateSignupInput(req.body);
 
     if (error) {
@@ -39,6 +50,7 @@ router.post('/signup', signupRateLimiter, asyncHandler(async (req, res) => {
     });
 
     await user.save();
+    await regenerateSession(req);
     req.session.userId = user._id;
     req.session.username = user.username;
     logSecurityEvent('signup_succeeded', req, {
