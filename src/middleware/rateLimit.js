@@ -91,11 +91,17 @@ function createRateLimiter(options = {}) {
     const maxAttempts = options.maxAttempts || 5;
     const message = options.message || "Too many requests. Please wait and try again.";
     const store = options.store || new MongoRateLimitStore();
+    const keyGenerator = options.keyGenerator || defaultKeyGenerator;
 
-    function getKey(req) {
+    function defaultKeyGenerator(req) {
         const ip = req.ip || req.socket?.remoteAddress || "unknown";
         const path = req.route?.path || req.path || req.originalUrl;
         return `${ip}:${req.method}:${path}`;
+    }
+
+    function getKey(req) {
+        const generatedKey = keyGenerator(req);
+        return generatedKey ? String(generatedKey) : defaultKeyGenerator(req);
     }
 
     async function rateLimiter(req, res, next) {
