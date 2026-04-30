@@ -35,7 +35,7 @@ router.post('/login', loginIpRateLimiter, loginAccountRateLimiter, asyncHandler(
             reason: 'missing_credentials',
             emailHash
         });
-        return res.status(400).render('signup.ejs', { error: 'Please enter both email and password.' });
+        return res.status(400).render('signup', { error: 'Please enter both email and password.' });
     }
 
     const user = await User.findOne({ email });
@@ -44,7 +44,7 @@ router.post('/login', loginIpRateLimiter, loginAccountRateLimiter, asyncHandler(
             reason: 'invalid_credentials',
             emailHash
         });
-        return res.status(400).render('signup.ejs', { error: 'Email or password is incorrect.' });
+        return res.status(400).render('signup', { error: 'Email or password is incorrect.' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -54,7 +54,7 @@ router.post('/login', loginIpRateLimiter, loginAccountRateLimiter, asyncHandler(
             emailHash,
             userId: String(user._id)
         });
-        return res.status(400).render('signup.ejs', { error: 'Email or password is incorrect.' });
+        return res.status(400).render('signup', { error: 'Email or password is incorrect.' });
     }
 
     await regenerateSession(req);
