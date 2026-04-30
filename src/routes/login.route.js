@@ -29,13 +29,20 @@ router.post('/login', loginIpRateLimiter, loginAccountRateLimiter, asyncHandler(
     const email = normalizeEmail(LoginEmail);
     const password = getPassword(LoginPassword);
     const emailHash = hashIdentifier(email);
+    const formData = {
+        loginEmail: email
+    };
 
     if (!email || !password) {
         logSecurityEvent('login_failed', req, {
             reason: 'missing_credentials',
             emailHash
         });
-        return res.status(400).render('signup.ejs', { error: 'Please enter both email and password.' });
+        return res.status(400).render('signup.ejs', {
+            error: 'Please enter both email and password.',
+            activeForm: 'login',
+            formData
+        });
     }
 
     const user = await User.findOne({ email });
@@ -44,7 +51,11 @@ router.post('/login', loginIpRateLimiter, loginAccountRateLimiter, asyncHandler(
             reason: 'invalid_credentials',
             emailHash
         });
-        return res.status(400).render('signup.ejs', { error: 'Email or password is incorrect.' });
+        return res.status(400).render('signup.ejs', {
+            error: 'Email or password is incorrect.',
+            activeForm: 'login',
+            formData
+        });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -54,7 +65,11 @@ router.post('/login', loginIpRateLimiter, loginAccountRateLimiter, asyncHandler(
             emailHash,
             userId: String(user._id)
         });
-        return res.status(400).render('signup.ejs', { error: 'Email or password is incorrect.' });
+        return res.status(400).render('signup.ejs', {
+            error: 'Email or password is incorrect.',
+            activeForm: 'login',
+            formData
+        });
     }
 
     await regenerateSession(req);

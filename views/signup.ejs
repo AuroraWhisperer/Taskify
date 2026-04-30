@@ -11,26 +11,28 @@
 </head>
 
 <body>
+  <% const currentForm = typeof activeForm === "string" ? activeForm : "signup"; %>
+  <% const safeFormData = typeof formData === "object" && formData ? formData : {}; %>
   <section class="section signup-section">
     <div class="container signup-container">
       <div class="main">
         <% if (error) { %>
-          <div class="auth-error"><%= error %></div>
+          <div class="auth-error" role="alert"><%= error %></div>
         <% } %>
-        <input type="checkbox" id="chk" aria-hidden="true" />
+        <input type="checkbox" id="chk" aria-hidden="true" <%= currentForm === "login" ? "checked" : "" %> />
 
         <div class="signup">
           <form method="post" action="/signup">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <label for="chk" aria-hidden="true">Sign up</label>
             <div class="signup-username">
-              <input type="text" name="SignUpUsername" placeholder="User name" aria-label="User name" required="true" />
+              <input type="text" name="SignUpUsername" placeholder="User name" aria-label="User name" autocomplete="username" value="<%= safeFormData.signupUsername || "" %>" required="true" />
             </div>
             <div class="signup-email">
-              <input type="email" name="SignUpEmail" placeholder="Email" aria-label="Email" required="true" />
+              <input type="email" name="SignUpEmail" placeholder="Email" aria-label="Email" autocomplete="email" value="<%= safeFormData.signupEmail || "" %>" required="true" />
             </div>
             <div class="signup-password">
-              <input type="password" name="SignUpPassword" placeholder="Password" aria-label="Password" required="true" />
+              <input type="password" name="SignUpPassword" placeholder="Password" aria-label="Password" autocomplete="new-password" required="true" />
             </div>
             <div>
               <input class="button" name="SignUpSubmit" type="submit" value="Sign up" />
@@ -42,10 +44,10 @@
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <label for="chk" aria-hidden="true">Login</label>
             <div class="signup-email">
-              <input type="email" name="LoginEmail" placeholder="Enter your email " aria-label="Email" required="true" />
+              <input type="email" name="LoginEmail" placeholder="Enter your email " aria-label="Email" autocomplete="email" value="<%= safeFormData.loginEmail || "" %>" required="true" />
             </div>
             <div class="signup-password">
-              <input type="password" name="LoginPassword" placeholder="Enter password" aria-label="Password" required="true" />
+              <input type="password" name="LoginPassword" placeholder="Enter password" aria-label="Password" autocomplete="current-password" required="true" />
             </div>
             <!-- <button href="/auth">Log In</button> -->
             <div>

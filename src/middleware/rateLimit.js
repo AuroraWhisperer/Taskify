@@ -104,6 +104,13 @@ function createRateLimiter(options = {}) {
         return generatedKey ? String(generatedKey) : defaultKeyGenerator(req);
     }
 
+    function getAuthViewState(req) {
+        return {
+            activeForm: req.path === "/login" ? "login" : "signup",
+            formData: {}
+        };
+    }
+
     async function rateLimiter(req, res, next) {
         const currentTime = Date.now();
         const key = getKey(req);
@@ -118,7 +125,10 @@ function createRateLimiter(options = {}) {
                     limit: maxAttempts,
                     windowMs
                 });
-                return res.status(429).render("signup.ejs", { error: message });
+                return res.status(429).render("signup.ejs", {
+                    error: message,
+                    ...getAuthViewState(req)
+                });
             }
 
             return next();

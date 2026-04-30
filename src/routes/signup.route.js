@@ -4,7 +4,7 @@ const User = require('../models/user.model');
 const createRateLimiter = require('../middleware/rateLimit');
 const asyncHandler = require('../utilities/asyncHandler');
 const { hashIdentifier, logSecurityEvent } = require('../utilities/auditLogger');
-const { normalizeEmail, validateSignupInput } = require('../utilities/validation');
+const { normalizeEmail, normalizeUsername, validateSignupInput } = require('../utilities/validation');
 const { regenerateSession } = require('../utilities/session');
 
 const signupIpRateLimiter = createRateLimiter({
@@ -25,10 +25,18 @@ const signupEmailRateLimiter = createRateLimiter({
 
 router.post('/signup', signupIpRateLimiter, signupEmailRateLimiter, asyncHandler(async (req, res) => {
     const { error, values } = validateSignupInput(req.body);
+    const formData = {
+        signupUsername: normalizeUsername(req.body?.SignUpUsername),
+        signupEmail: normalizeEmail(req.body?.SignUpEmail)
+    };
 
     if (error) {
         logSecurityEvent('signup_rejected', req, { reason: 'validation_failed' });
-        return res.status(400).render('signup.ejs', { error });
+        return res.status(400).render('signup.ejs', {
+            error,
+            activeForm: 'signup',
+            formData
+        });
     }
 
     const emailHash = hashIdentifier(values.email);
@@ -39,7 +47,9 @@ router.post('/signup', signupIpRateLimiter, signupEmailRateLimiter, asyncHandler
             emailHash
         });
         return res.status(400).render('signup.ejs', {
-            error: 'Signup could not be completed. Please check your details and try again.'
+            error: 'Signup could not be completed. Please check your details and try again.',
+            activeForm: 'signup',
+            formData
         });
     }
 
