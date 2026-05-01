@@ -1,3 +1,4 @@
+<% const isLoginView = typeof showLogin !== "undefined" && showLogin; %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,30 +9,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../static/styles/signup.css" />
   <link rel="stylesheet" href="../static/styles/partials/cookie-banner.css" />
-  <title>SignUp</title>
+  <title><%= isLoginView ? "Login" : "SignUp" %></title>
 </head>
 
 <body>
   <section class="section signup-section">
+    <a href="/" class="auth-home-link" aria-label="Back to home">Taskify</a>
     <div class="container signup-container">
-      <div class="main">
+      <div class="main <%= error ? "has-auth-error" : "" %>">
         <% if (error) { %>
           <div class="auth-error"><%= error %></div>
         <% } %>
-        <input type="checkbox" id="chk" aria-hidden="true" />
+        <input type="checkbox" id="chk" aria-hidden="true" <%= isLoginView ? "checked" : "" %> />
 
         <div class="signup">
           <form method="post" action="/signup">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <label for="chk" aria-hidden="true">Sign up</label>
             <div class="signup-username">
-              <input type="text" name="SignUpUsername" placeholder="User name" required="true" />
+              <input type="text" name="SignUpUsername" placeholder="User name" autocomplete="username" required="true" />
             </div>
             <div class="signup-email">
-              <input type="email" name="SignUpEmail" placeholder="Email" required="true" />
+              <input type="email" name="SignUpEmail" placeholder="Email" autocomplete="email" autocapitalize="none" spellcheck="false" required="true" />
             </div>
             <div class="signup-password">
-              <input type="password" name="SignUpPassword" placeholder="Password" required="true" />
+              <input type="password" name="SignUpPassword" placeholder="Password" autocomplete="new-password" required="true" />
             </div>
             <div>
               <input class="button" name="SignUpSubmit" type="submit" value="Sign up" />
@@ -39,14 +41,14 @@
           </form>
         </div>
         <div class="login">
-          <form method="post" action="/login">
+          <form method="post" action="/login" autocomplete="off" data-clear-on-load="true">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <label for="chk" aria-hidden="true">Login</label>
             <div class="signup-email">
-              <input type="email" name="LoginEmail" placeholder="Enter your email " required="true" />
+              <input type="email" name="LoginEmail" placeholder="Enter your email " autocomplete="off" autocapitalize="none" spellcheck="false" value="" readonly required="true" />
             </div>
             <div class="signup-password">
-              <input type="password" name="LoginPassword" placeholder="Enter password" required="true" />
+              <input type="password" name="LoginPassword" placeholder="Enter password" autocomplete="new-password" value="" readonly required="true" />
             </div>
             <!-- <button href="/auth">Log In</button> -->
             <div>
@@ -58,6 +60,7 @@
     </div>
   </section>
   <%- include("../views/partials/cookie-banner.ejs") %>
+  <script src="/static/js/auth-form.js" defer></script>
   <script src="/static/js/cookie-banner.js" defer></script>
 </body>
 

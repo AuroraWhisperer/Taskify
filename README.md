@@ -180,7 +180,7 @@ Run the automated security checks:
 npm test
 ```
 
-The current tests cover signup validation, CSRF rejection, rate limiting, session cookie options, and environment validation.
+The current tests cover signup validation, CSRF rejection, rate limiting, session cookie options, environment validation, duplicate-email signup races, and a MongoDB-backed signup/login persistence flow.
 
 ## Security review notes
 
