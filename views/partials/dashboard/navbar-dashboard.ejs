@@ -1,62 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
+<header class="dashboard-header-navbar">
+  <div class="dashboard-navbar-container">
+    <nav class="dashboard-navbar-dashboard-navbar">
+      <form action="#" class="dashboard-navbar-search-bar">
+        <button type="submit" aria-label="Search">
+          <i class="fas fa-search"></i>
+        </button>
+        <input type="text" placeholder="Search" aria-label="Search" />
+      </form>
+      <div class="dashboard-navbar-dashboard-links">
+        <ul class="dashboard-navbar-dashboard-navbar-links">
+          <li>
+            <a href="#" aria-label="Help"><i class="fa-regular fa-circle-question"></i></a>
+          </li>
+          <li>
+            <a href="#" class="dashboard-navbar-bell-icon" aria-label="Notifications"><i class="far fa-bell"></i></a>
+          </li>
+          <li>
+            <div class="dashboard-navbar-dropdown">
+              <button type="button" class="dashboard-navbar-dropbtn" aria-haspopup="true" aria-expanded="false"><%= username %> <i class="fa-solid fa-chevron-down"></i></button>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-  <link rel="stylesheet" href="../../../static/styles/partials/dashboard/navbar-dashboard.css" />
-  <link rel="stylesheet" href="../../../static/styles/main.css">
-
-
-</head>
-
-<body>
-  <header class="dashboard-header-navbar">
-    <div class="dashboard-navbar-container">
-      <nav class="dashboard-navbar-dashboard-navbar">
-          <form action="#" class="dashboard-navbar-search-bar">
-            <button type="submit">
-              <i class="fas fa-search"></i>
-            </button>
-            <input type="text" placeholder="Search" />
-          </form>
-        <div class="dashboard-navbar-dashboard-links">
-          <ul class="dashboard-navbar-dashboard-navbar-links">
-            <li>
-              <a href="#"><i class="fa-regular fa-circle-question"></i></a>
-            </li>
-            <li>
-              <a href="#" class="dashboard-navbar-bell-icon"><i class="far fa-bell"></i></a>
-            </li>
-            <li>
-              <div class="dashboard-navbar-dropdown">
-                <button type="button" class="dashboard-navbar-dropbtn"><%= username %> <i class="fa-solid fa-chevron-down"></i></button>
-
-                <div id="dashboard-navbar-myDropdown" class="dashboard-navbar-dropdown-content">
-                  <a href="#" class="dashboard-navbar-dropdown-link">Profile</a>
-                  <form method="post" action="/logout" class="dashboard-navbar-dropdown-form">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                    <button type="submit" class="dashboard-navbar-dropdown-action">Log Out</button>
-                  </form>
-                  <form method="post" action="/delete-account" class="dashboard-navbar-dropdown-form dashboard-navbar-delete-account-form">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                    <input type="password" name="deletePassword" class="dashboard-navbar-delete-password" placeholder="Confirm password" autocomplete="current-password" required />
-                    <button type="submit" class="dashboard-navbar-dropdown-action dashboard-navbar-delete-action">Delete Account</button>
-                  </form>
-                </div>
+              <div id="dashboard-navbar-myDropdown" class="dashboard-navbar-dropdown-content">
+                <a href="#" class="dashboard-navbar-dropdown-link">Profile</a>
+                <form method="post" action="/logout" class="dashboard-navbar-dropdown-form">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                  <button type="submit" class="dashboard-navbar-dropdown-action">Log Out</button>
+                </form>
+                <form method="post" action="/delete-account" class="dashboard-navbar-dropdown-form dashboard-navbar-delete-account-form">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                  <input type="password" name="deletePassword" class="dashboard-navbar-delete-password" placeholder="Confirm password" aria-label="Confirm password" autocomplete="current-password" required />
+                  <button type="submit" class="dashboard-navbar-dropdown-action dashboard-navbar-delete-action">Delete Account</button>
+                </form>
               </div>
-            </li>
-            <li>
-              <a href="#"><i class="fa-regular fa-user dashboard-navbar-link-img dashboard-navbar-profile-icon"></i></a>
-            </li>
-            
-          </ul>
-        </div>
-      </nav>
-    </div>
-  </header>
-</body>
-<script src="/static/js/dashboard-navbar.js" defer></script>
-</html>
+            </div>
+          </li>
+          <li>
+            <a href="#" aria-label="Profile"><i class="fa-regular fa-user dashboard-navbar-link-img dashboard-navbar-profile-icon"></i></a>
+          </li>
+
+        </ul>
+      </div>
+    </nav>
+  </div>
+</header>
