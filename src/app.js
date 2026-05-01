@@ -69,7 +69,11 @@ function createApp(options = {}) {
     });
 
     app.get("/signup", (req, res) => {
-        res.status(200).render("signup.ejs", { error: null });
+        res.status(200).render("signup.ejs", { error: null, showLogin: false });
+    });
+
+    app.get("/login", (req, res) => {
+        res.status(200).render("signup.ejs", { error: null, showLogin: true });
     });
 
     app.use(signupRouter);

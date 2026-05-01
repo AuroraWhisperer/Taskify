@@ -41,6 +41,8 @@ Automated tests were added for the main security controls:
 - CSRF rejection and valid-token acceptance
 - Login/signup rate limiting, including account-specific limiter keys
 - Signup input validation
+- Duplicate-email signup races that reach the MongoDB unique index
+- MongoDB-backed signup/login persistence after a fresh app session
 - Hardened session cookie options
 - Required environment configuration checks
 
