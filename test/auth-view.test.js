@@ -9,7 +9,7 @@ function renderSignupView(data) {
     return ejs.renderFile(signupViewPath, {
         csrfToken: "test_csrf_token",
         error: null,
-        activeForm: "signup",
+        showLogin: false,
         formData: {},
         ...data
     });
@@ -30,9 +30,9 @@ test("signup error view preserves non-sensitive signup input", async () => {
     assert.doesNotMatch(html, /name="SignUpPassword"[^>]*value=/);
 });
 
-test("login error view keeps login panel active and preserves email", async () => {
+test("login error view keeps login panel active without preserving credentials", async () => {
     const html = await renderSignupView({
-        activeForm: "login",
+        showLogin: true,
         error: "Email or password is incorrect.",
         formData: {
             loginEmail: "alice@example.com"
@@ -40,6 +40,7 @@ test("login error view keeps login panel active and preserves email", async () =
     });
 
     assert.match(html, /id="chk"[^>]*checked/);
-    assert.match(html, /name="LoginEmail"[^>]*value="alice@example.com"/);
-    assert.doesNotMatch(html, /name="LoginPassword"[^>]*value=/);
+    assert.doesNotMatch(html, /alice@example.com/);
+    assert.match(html, /name="LoginEmail"[^>]*value=""/);
+    assert.match(html, /name="LoginPassword"[^>]*value=""/);
 });

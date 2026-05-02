@@ -31,7 +31,7 @@ The authentication page gave weak feedback after failed form submissions:
 
 - Signup validation errors cleared the username and email fields.
 - Login errors rendered the shared signup/login page but did not keep the login panel active.
-- Password fields should never be repopulated, but non-sensitive fields can be preserved.
+- Signup username and email are non-sensitive enough to preserve during correction, while login credentials should remain empty because the main authentication flow intentionally clears login fields for privacy.
 
 This made common correction workflows slower without requiring a large UI redesign.
 
@@ -41,15 +41,12 @@ Nielsen and Molich's heuristic evaluation work frames timely, useful feedback as
 
 ### Implementation
 
-The server now passes `activeForm` and `formData` when rendering authentication errors. The EJS view uses those values to keep the correct panel active and preserve only non-sensitive email/username input. Password values are still never rendered back into the page.
+After merging the main authentication flow, login state is handled through the existing `showLogin` view flag and `auth-form.js` privacy guard. This branch keeps that model and adds `formData` only for signup correction, so failed signup submissions preserve normalized username and email. Login fields and all password fields remain empty.
 
 ### Files Changed
 
 - `src/app.js`
 - `src/routes/signup.route.js`
-- `src/routes/login.route.js`
-- `src/middleware/rateLimit.js`
-- `src/middleware/errorHandler.js`
 - `views/signup.ejs`
 - `test/auth-view.test.js`
 
@@ -63,9 +60,9 @@ npm test
 
 Result:
 
-- 17 tests passed.
+- Full project test suite passed after merging the latest `main` authentication flow: 22 tests passed.
 - Added coverage for the IPv4 MongoDB default.
-- Added coverage for authentication form feedback and password non-repopulation.
+- Added coverage for signup form feedback, login panel state, and credential non-repopulation.
 
 ## References
 

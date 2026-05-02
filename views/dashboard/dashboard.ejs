@@ -11,8 +11,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="../../static/styles/main.css" />
-  <link rel="stylesheet" href="../../static/styles/dashboard/dashboard.css">
+  <link rel="stylesheet" href="../../static/styles/dashboard/dashboard.css" />
+  <link rel="stylesheet" href="../../static/styles/partials/dashboard/navbar-dashboard.css" />
+  <link rel="stylesheet" href="../../static/styles/partials/dashboard/dashboard-sidebar.css" />
+  <link rel="stylesheet" href="../../static/styles/partials/dashboard/dashboard-cards.css" />
+  <link rel="stylesheet" href="../../static/styles/partials/cookie-banner.css" />
+</head>
 
 <body>
   <!-- The main dashboard is here  -->
@@ -29,6 +35,9 @@
       <%-include("../partials/dashboard/dashboard-cards.ejs") %>
     </div>
   </div>
+  <%- include("../partials/cookie-banner.ejs") %>
+  <script src="/static/js/dashboard-navbar.js" defer></script>
+  <script src="/static/js/cookie-banner.js" defer></script>
 
 </body>
 

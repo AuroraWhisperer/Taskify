@@ -7,67 +7,109 @@ const { hashIdentifier, logSecurityEvent } = require('../utilities/auditLogger')
 const { normalizeEmail, normalizeUsername, validateSignupInput } = require('../utilities/validation');
 const { regenerateSession } = require('../utilities/session');
 
-const signupIpRateLimiter = createRateLimiter({
-    windowMs: 30 * 60 * 1000,
-    maxAttempts: 10,
-    message: 'Too many signup attempts. Please wait 30 minutes and try again.'
-});
-
-const signupEmailRateLimiter = createRateLimiter({
-    windowMs: 30 * 60 * 1000,
-    maxAttempts: 5,
-    message: 'Too many signup attempts for this email. Please wait 30 minutes and try again.',
-    keyGenerator: (req) => {
-        const email = normalizeEmail(req.body?.SignUpEmail);
-        return email ? `signup-email:${hashIdentifier(email)}` : null;
+function isDuplicateEmailError(err) {
+    if (!err || err.code !== 11000) {
+        return false;
     }
-});
 
-router.post('/signup', signupIpRateLimiter, signupEmailRateLimiter, asyncHandler(async (req, res) => {
-    const { error, values } = validateSignupInput(req.body);
-    const formData = {
+    return Boolean(
+        err.keyPattern?.email ||
+        err.keyValue?.email ||
+        /email/i.test(String(err.message || ''))
+    );
+}
+
+function getSignupFormData(req) {
+    return {
         signupUsername: normalizeUsername(req.body?.SignUpUsername),
         signupEmail: normalizeEmail(req.body?.SignUpEmail)
     };
+}
 
-    if (error) {
-        logSecurityEvent('signup_rejected', req, { reason: 'validation_failed' });
-        return res.status(400).render('signup.ejs', {
-            error,
-            activeForm: 'signup',
-            formData
-        });
-    }
-
-    const emailHash = hashIdentifier(values.email);
-    const existing = await User.findOne({ email: values.email });
-    if (existing) {
-        logSecurityEvent('signup_rejected', req, {
-            reason: 'duplicate_email',
-            emailHash
-        });
-        return res.status(400).render('signup.ejs', {
-            error: 'Signup could not be completed. Please check your details and try again.',
-            activeForm: 'signup',
-            formData
-        });
-    }
-
-    const user = new User({
-        username: values.username,
-        email: values.email,
-        password: values.password
+function renderDuplicateEmail(req, res, emailHash) {
+    logSecurityEvent('signup_rejected', req, {
+        reason: 'duplicate_email',
+        emailHash
     });
 
-    await user.save();
-    await regenerateSession(req);
-    req.session.userId = user._id;
-    req.session.username = user.username;
-    logSecurityEvent('signup_succeeded', req, {
-        emailHash,
-        userId: String(user._id)
+    return res.status(400).render('signup', {
+        error: 'Signup could not be completed. Please check your details and try again.',
+        showLogin: false,
+        formData: getSignupFormData(req)
     });
-    res.redirect('/dashboard');
-}));
+}
 
-module.exports = router;
+function createSignupIpRateLimiter() {
+    return createRateLimiter({
+        windowMs: 30 * 60 * 1000,
+        maxAttempts: 10,
+        message: 'Too many signup attempts. Please wait 30 minutes and try again.'
+    });
+}
+
+function createSignupEmailRateLimiter() {
+    return createRateLimiter({
+        windowMs: 30 * 60 * 1000,
+        maxAttempts: 5,
+        message: 'Too many signup attempts for this email. Please wait 30 minutes and try again.',
+        keyGenerator: (req) => {
+            const email = normalizeEmail(req.body?.SignUpEmail);
+            return email ? `signup-email:${hashIdentifier(email)}` : null;
+        }
+    });
+}
+
+function createSignupRouter(options = {}) {
+    const router = express.Router();
+    const UserModel = options.UserModel || User;
+    const signupIpRateLimiter = options.signupIpRateLimiter || createSignupIpRateLimiter();
+    const signupEmailRateLimiter = options.signupEmailRateLimiter || createSignupEmailRateLimiter();
+
+    router.post('/signup', signupIpRateLimiter, signupEmailRateLimiter, asyncHandler(async (req, res) => {
+        const { error, values } = validateSignupInput(req.body);
+        const formData = getSignupFormData(req);
+
+        if (error) {
+            logSecurityEvent('signup_rejected', req, { reason: 'validation_failed' });
+            return res.status(400).render('signup', { error, showLogin: false, formData });
+        }
+
+        const emailHash = hashIdentifier(values.email);
+        const existing = await UserModel.findOne({ email: values.email });
+        if (existing) {
+            return renderDuplicateEmail(req, res, emailHash);
+        }
+
+        const user = new UserModel({
+            username: values.username,
+            email: values.email,
+            password: values.password
+        });
+
+        try {
+            await user.save();
+        } catch (err) {
+            if (isDuplicateEmailError(err)) {
+                return renderDuplicateEmail(req, res, emailHash);
+            }
+
+            throw err;
+        }
+
+        await regenerateSession(req);
+        req.session.userId = user._id;
+        req.session.username = user.username;
+        logSecurityEvent('signup_succeeded', req, {
+            emailHash,
+            userId: String(user._id)
+        });
+        res.redirect('/dashboard');
+    }));
+
+    return router;
+}
+
+module.exports = createSignupRouter();
+module.exports.createSignupRouter = createSignupRouter;
+module.exports.getSignupFormData = getSignupFormData;
+module.exports.isDuplicateEmailError = isDuplicateEmailError;
