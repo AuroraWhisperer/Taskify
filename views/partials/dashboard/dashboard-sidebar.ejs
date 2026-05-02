@@ -5,7 +5,7 @@
         <img src="../../../static/assets/nav_logo.png" alt="" />
       </div>
       <div class="sidebar-title">Taskify</div>
-      <a href="#" aria-label="Toggle sidebar menu">
+      <a href="#" aria-label="<%= t('sidebar.toggleMenu') %>">
         <i class="menuIcon material-icons">menu</i>
       </a>
     </div>
@@ -14,7 +14,7 @@
         <li class="sidebar-list">
           <a href="/">
             <span class="sidebar-icon"><i class="fa-solid fa-house"></i></span>
-            <span class="sidebar-name">Home</span>
+            <span class="sidebar-name"><%= t('sidebar.home') %></span>
           </a>
         </li>
 
@@ -23,21 +23,21 @@
             <span class="sidebar-icon">
               <i class="fa-solid fa-chart-simple"></i>
             </span>
-            <span class="sidebar-name">Stats</span>
+            <span class="sidebar-name"><%= t('sidebar.stats') %></span>
           </a>
         </li>
 
         <li class="sidebar-list">
           <a href="#">
             <span class="sidebar-icon"><i class="fa-solid fa-folder-open"></i></span>
-            <span class="sidebar-name">Projects</span>
+            <span class="sidebar-name"><%= t('sidebar.projects') %></span>
           </a>
         </li>
 
         <li class="sidebar-list">
           <a href="#">
             <span class="sidebar-icon"><i class="fa-solid fa-comment"></i></span>
-            <span class="sidebar-name">Chat</span>
+            <span class="sidebar-name"><%= t('sidebar.chat') %></span>
           </a>
         </li>
 
@@ -46,14 +46,14 @@
             <span class="sidebar-icon">
               <i class="fa-solid fa-calendar-days"></i>
             </span>
-            <span class="sidebar-name">Calendar</span>
+            <span class="sidebar-name"><%= t('sidebar.calendar') %></span>
           </a>
         </li>
         <div class="bottom-section">
           <li class="sidebar-list">
             <a href="#">
               <span class="sidebar-icon"><i class="fa-solid fa-gear"></i></span>
-              <span class="sidebar-name">Settings</span>
+              <span class="sidebar-name"><%= t('sidebar.settings') %></span>
             </a>
           </li>
 
@@ -64,7 +64,7 @@
                 <span class="sidebar-icon">
                   <i class="fa-solid fa-right-from-bracket"></i>
                 </span>
-                <span class="sidebar-name">Log out</span>
+                <span class="sidebar-name"><%= t('sidebar.logOut') %></span>
               </button>
             </form>
           </li>

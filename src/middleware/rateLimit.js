@@ -1,4 +1,5 @@
 const { logSecurityEvent } = require("../utilities/auditLogger");
+const { pickLocale, translate } = require("../utilities/i18n");
 const RateLimit = require("../models/rateLimit.model");
 
 class MemoryRateLimitStore {
@@ -89,7 +90,8 @@ class MongoRateLimitStore {
 function createRateLimiter(options = {}) {
     const windowMs = options.windowMs || 15 * 60 * 1000;
     const maxAttempts = options.maxAttempts || 5;
-    const message = options.message || "Too many requests. Please wait and try again.";
+    const messageKey = options.messageKey;
+    const message = options.message;
     const store = options.store || new MongoRateLimitStore();
     const keyGenerator = options.keyGenerator || defaultKeyGenerator;
     const renderLocals = options.renderLocals || {};
@@ -119,7 +121,21 @@ function createRateLimiter(options = {}) {
                     limit: maxAttempts,
                     windowMs
                 });
-                return res.status(429).render("signup", { error: message, ...renderLocals });
+                let errorMessage;
+                if (messageKey) {
+                    errorMessage =
+                        typeof req.t === "function"
+                            ? req.t(messageKey)
+                            : translate(pickLocale(req), messageKey);
+                } else if (typeof message === "string" && message.length > 0) {
+                    errorMessage = message;
+                } else {
+                    errorMessage =
+                        typeof req.t === "function"
+                            ? req.t("rateLimit.generic")
+                            : translate(pickLocale(req), "rateLimit.generic");
+                }
+                return res.status(429).render("signup", { error: errorMessage, ...renderLocals });
             }
 
             return next();

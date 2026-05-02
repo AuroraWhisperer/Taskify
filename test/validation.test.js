@@ -14,7 +14,7 @@ test("signup validation accepts and normalizes valid input", () => {
         SignUpPassword: "pass1234"
     });
 
-    assert.equal(result.error, null);
+    assert.equal(result.errorKey, null);
     assert.deepEqual(result.values, {
         username: "Alice Smith",
         email: "alice@example.com",
@@ -29,7 +29,7 @@ test("signup validation rejects invalid username characters", () => {
         SignUpPassword: "pass1234"
     });
 
-    assert.equal(result.error, "Username can only contain letters, numbers, spaces, underscores, and hyphens.");
+    assert.equal(result.errorKey, "validation.username_pattern");
 });
 
 test("signup validation rejects invalid email", () => {
@@ -39,7 +39,7 @@ test("signup validation rejects invalid email", () => {
         SignUpPassword: "pass1234"
     });
 
-    assert.equal(result.error, "Please enter a valid email address.");
+    assert.equal(result.errorKey, "validation.email_invalid");
 });
 
 test("signup validation rejects weak password", () => {
@@ -49,7 +49,7 @@ test("signup validation rejects weak password", () => {
         SignUpPassword: "password"
     });
 
-    assert.equal(result.error, "Password must include at least one letter and one number.");
+    assert.equal(result.errorKey, "validation.password_strength");
 });
 
 test("normalizers handle non-string values safely", () => {
