@@ -27,15 +27,19 @@
 a {
   text-decoration: none;
 }
-header {
+header.site-header {
   position: fixed;
   top: 0;
   left: 0;
-  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
   background-color: var(--clr-main-bg);
   width: 100%;
   z-index: 20;
+  transition: box-shadow var(--gen-transition);
+}
 
+header.site-header.is-scrolled {
+  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.16);
 }
 .navbar-container {
   margin: auto;
