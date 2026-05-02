@@ -2,39 +2,42 @@
   <div class="dashboard-navbar-container">
     <nav class="dashboard-navbar-dashboard-navbar">
       <form action="#" class="dashboard-navbar-search-bar">
-        <button type="submit" aria-label="Search">
+        <button type="submit" aria-label="<%= t('dashboard.searchAria') %>">
           <i class="fas fa-search"></i>
         </button>
-        <input type="text" placeholder="Search" aria-label="Search" />
+        <input type="text" placeholder="<%= t('dashboard.searchPlaceholder') %>" aria-label="<%= t('dashboard.searchAria') %>" />
       </form>
       <div class="dashboard-navbar-dashboard-links">
         <ul class="dashboard-navbar-dashboard-navbar-links">
           <li>
-            <a href="#" aria-label="Help"><i class="fa-regular fa-circle-question"></i></a>
+            <a href="#" aria-label="<%= t('dashboard.helpAria') %>"><i class="fa-regular fa-circle-question"></i></a>
           </li>
           <li>
-            <a href="#" class="dashboard-navbar-bell-icon" aria-label="Notifications"><i class="far fa-bell"></i></a>
+            <a href="#" class="dashboard-navbar-bell-icon" aria-label="<%= t('dashboard.notificationsAria') %>"><i class="far fa-bell"></i></a>
           </li>
           <li>
             <div class="dashboard-navbar-dropdown">
               <button type="button" class="dashboard-navbar-dropbtn" aria-haspopup="true" aria-expanded="false"><%= username %> <i class="fa-solid fa-chevron-down"></i></button>
 
               <div id="dashboard-navbar-myDropdown" class="dashboard-navbar-dropdown-content">
-                <a href="#" class="dashboard-navbar-dropdown-link">Profile</a>
+                <a href="#" class="dashboard-navbar-dropdown-link"><%= t('dashboard.profileLink') %></a>
                 <form method="post" action="/logout" class="dashboard-navbar-dropdown-form">
                   <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                  <button type="submit" class="dashboard-navbar-dropdown-action">Log Out</button>
+                  <button type="submit" class="dashboard-navbar-dropdown-action"><%= t('dashboard.logOut') %></button>
                 </form>
                 <form method="post" action="/delete-account" class="dashboard-navbar-dropdown-form dashboard-navbar-delete-account-form">
                   <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                  <input type="password" name="deletePassword" class="dashboard-navbar-delete-password" placeholder="Confirm password" aria-label="Confirm password" autocomplete="current-password" required />
-                  <button type="submit" class="dashboard-navbar-dropdown-action dashboard-navbar-delete-action">Delete Account</button>
+                  <input type="password" name="deletePassword" class="dashboard-navbar-delete-password" placeholder="<%= t('dashboard.confirmPassword') %>" aria-label="<%= t('dashboard.confirmPasswordAria') %>" autocomplete="current-password" required />
+                  <button type="submit" class="dashboard-navbar-dropdown-action dashboard-navbar-delete-action"><%= t('dashboard.deleteAccount') %></button>
                 </form>
               </div>
             </div>
           </li>
           <li>
-            <a href="#" aria-label="Profile"><i class="fa-regular fa-user dashboard-navbar-link-img dashboard-navbar-profile-icon"></i></a>
+            <a href="<%= localeSwitchHref(localeOther) %>" class="dashboard-navbar-locale-link" aria-label="<%= t('nav.localeAria') %>"><%= localeOtherLabel %></a>
+          </li>
+          <li>
+            <a href="#" aria-label="<%= t('dashboard.profileIconAria') %>"><i class="fa-regular fa-user dashboard-navbar-link-img dashboard-navbar-profile-icon"></i></a>
           </li>
 
         </ul>

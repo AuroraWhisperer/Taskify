@@ -1,4 +1,13 @@
 const { logErrorEvent, logSecurityEvent } = require("../utilities/auditLogger");
+const { pickLocale, translate } = require("../utilities/i18n");
+
+function t(req, key) {
+    if (typeof req.t === "function") {
+        return req.t(key);
+    }
+
+    return translate(pickLocale(req), key);
+}
 
 function wantsHtml(req) {
     if (typeof req.accepts !== "function") {
@@ -20,21 +29,21 @@ function getStatusCode(err) {
 
 function renderGenericResponse(req, res, statusCode) {
     if (statusCode === 403) {
-        return res.status(403).send("Request could not be completed.");
+        return res.status(403).send(t(req, "error.forbidden"));
     }
 
     if (wantsHtml(req) && (req.path === "/login" || req.path === "/signup")) {
         return res.status(statusCode).render("signup", {
-            error: "The request could not be completed. Please try again later.",
+            error: t(req, "error.auth_retry"),
             showLogin: req.path === "/login"
         });
     }
 
-    return res.status(statusCode).send("Something went wrong. Please try again later.");
+    return res.status(statusCode).send(t(req, "error.server"));
 }
 
 function notFoundHandler(req, res) {
-    res.status(404).send("404 - Page Not Found");
+    res.status(404).send(t(req, "error.not_found"));
 }
 
 function errorHandler(err, req, res, next) {

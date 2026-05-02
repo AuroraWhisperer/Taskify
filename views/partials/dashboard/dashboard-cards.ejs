@@ -4,15 +4,15 @@
       <!-- <div class="dashboard-cards-container"> -->
       <!-- dashboard container head -->
       <div class="dashboard-head">
-        <div class="dashboard-project">Projects</div>
+        <div class="dashboard-project"><%= t('dashboard.projects') %></div>
 
         <!-- select menu -->
         <div class="dashboard-select">
-          <select class="dashboard-custom-select" aria-label="Project period">
-            <option value="dashboard-This Day">This Day</option>
-            <option value="dashboard-This Week">This Week</option>
-            <option value="dashboard-This Month">This Month</option>
-            <option value="dashboard-This Year">This Year</option>
+          <select class="dashboard-custom-select" aria-label="<%= t('dashboard.periodAria') %>">
+            <option value="dashboard-This Day"><%= t('dashboard.periodThisDay') %></option>
+            <option value="dashboard-This Week"><%= t('dashboard.periodThisWeek') %></option>
+            <option value="dashboard-This Month"><%= t('dashboard.periodThisMonth') %></option>
+            <option value="dashboard-This Year"><%= t('dashboard.periodThisYear') %></option>
           </select>
         </div>
       </div>
@@ -23,7 +23,7 @@
         <div class="dashboard-card card-1">
           <!-- card head -->
           <div class="dashboard-card-head">
-            <div class="dashboard-card-topic">To do</div>
+            <div class="dashboard-card-topic"><%= t('dashboard.columnTodo') %></div>
             <div class="dashboard-task-number">0</div>
           </div>
           <!-- Add task option -->
@@ -55,7 +55,7 @@
         <div class="dashboard-card card-2">
           <!-- card head -->
           <div class="dashboard-card-head">
-            <div class="dashboard-card-topic">In progress</div>
+            <div class="dashboard-card-topic"><%= t('dashboard.columnInProgress') %></div>
             <div class="dashboard-task-number">0</div>
           </div>
           <!-- Add task option -->
@@ -78,7 +78,7 @@
         <div class="dashboard-card card-3">
           <!-- card head -->
           <div class="dashboard-card-head">
-            <div class="dashboard-card-topic">Completed</div>
+            <div class="dashboard-card-topic"><%= t('dashboard.columnCompleted') %></div>
             <div class="task-number">0</div>
           </div>
           <!-- Add task option -->
