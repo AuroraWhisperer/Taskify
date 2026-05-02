@@ -69,7 +69,11 @@ function createApp(options = {}) {
     });
 
     app.get("/signup", (req, res) => {
-        res.status(200).render("signup.ejs", { error: null });
+        res.status(200).render("signup.ejs", { error: null, showLogin: false });
+    });
+
+    app.get("/login", (req, res) => {
+        res.status(200).render("signup.ejs", { error: null, showLogin: true });
     });
 
     app.use(signupRouter);
@@ -84,7 +88,7 @@ function createApp(options = {}) {
             }
 
             logSecurityEvent("logout_succeeded", req, { userId });
-            return res.redirect("/signup");
+            return res.redirect("/");
         });
     });
 
@@ -124,7 +128,7 @@ function createApp(options = {}) {
                     return next(err);
                 }
 
-                return res.redirect("/signup");
+                return res.redirect("/");
             });
         }
 

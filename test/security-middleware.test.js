@@ -4,6 +4,7 @@ const path = require("node:path");
 const express = require("express");
 const session = require("express-session");
 
+const { createApp } = require("../src/app");
 const csrfProtection = require("../src/middleware/csrf");
 const createRateLimiter = require("../src/middleware/rateLimit");
 const { MemoryRateLimitStore } = createRateLimiter;
@@ -63,6 +64,61 @@ function createCsrfTestApp() {
 
     return app;
 }
+
+function createRouteTestApp() {
+    return createApp({
+        useMemorySessionStore: true,
+        sessionSecret: "test_session_secret_with_enough_length"
+    });
+}
+
+test("login route opens the login panel by default", async () => {
+    await withServer(createRouteTestApp(), async (baseUrl) => {
+        const response = await fetch(`${baseUrl}/login`);
+        const html = await response.text();
+
+        assert.equal(response.status, 200);
+        assert.match(html, /<title>Login<\/title>/);
+        assert.match(html, /id="chk"[^>]*checked/);
+    });
+});
+
+test("logged-out navigation and auth redirect point to login", async () => {
+    await withServer(createRouteTestApp(), async (baseUrl) => {
+        const homeResponse = await fetch(`${baseUrl}/`);
+        const homeHtml = await homeResponse.text();
+        const dashboardResponse = await fetch(`${baseUrl}/dashboard`, { redirect: "manual" });
+
+        assert.equal(homeResponse.status, 200);
+        assert.match(homeHtml, /href="\/login" class="btn2 nav-btn">Log In/);
+        assert.equal(dashboardResponse.status, 302);
+        assert.equal(dashboardResponse.headers.get("location"), "/login");
+    });
+});
+
+test("logout redirects back to the logged-out home page", async () => {
+    await withServer(createRouteTestApp(), async (baseUrl) => {
+        const loginResponse = await fetch(`${baseUrl}/login`);
+        const cookie = getSessionCookie(loginResponse);
+        const html = await loginResponse.text();
+        const token = html.match(/name="_csrf" value="([^"]+)"/)?.[1];
+
+        assert.ok(token, "expected csrf token in login page");
+
+        const logoutResponse = await fetch(`${baseUrl}/logout`, {
+            method: "POST",
+            headers: {
+                Cookie: cookie,
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `_csrf=${encodeURIComponent(token)}`,
+            redirect: "manual"
+        });
+
+        assert.equal(logoutResponse.status, 302);
+        assert.equal(logoutResponse.headers.get("location"), "/");
+    });
+});
 
 test("csrf middleware rejects unsafe requests without a token", async () => {
     await withServer(createCsrfTestApp(), async (baseUrl) => {

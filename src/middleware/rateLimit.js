@@ -92,6 +92,7 @@ function createRateLimiter(options = {}) {
     const message = options.message || "Too many requests. Please wait and try again.";
     const store = options.store || new MongoRateLimitStore();
     const keyGenerator = options.keyGenerator || defaultKeyGenerator;
+    const renderLocals = options.renderLocals || {};
 
     function defaultKeyGenerator(req) {
         const ip = req.ip || req.socket?.remoteAddress || "unknown";
@@ -118,7 +119,7 @@ function createRateLimiter(options = {}) {
                     limit: maxAttempts,
                     windowMs
                 });
-                return res.status(429).render("signup", { error: message });
+                return res.status(429).render("signup", { error: message, ...renderLocals });
             }
 
             return next();
