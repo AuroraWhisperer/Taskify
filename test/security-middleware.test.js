@@ -6,6 +6,7 @@ const session = require("express-session");
 
 const { createApp } = require("../src/app");
 const csrfProtection = require("../src/middleware/csrf");
+const i18nMiddleware = require("../src/middleware/i18n");
 const createRateLimiter = require("../src/middleware/rateLimit");
 const { MemoryRateLimitStore } = createRateLimiter;
 
@@ -179,6 +180,7 @@ test("rate limiter returns 429 after repeated attempts", async () => {
         res.locals.csrfToken = "test_csrf_token";
         next();
     });
+    app.use(i18nMiddleware);
     app.post("/login", limiter, (req, res) => {
         res.status(400).send("invalid");
     });
@@ -222,6 +224,7 @@ test("rate limiter can use account-specific keys", async () => {
         res.locals.csrfToken = "test_csrf_token";
         next();
     });
+    app.use(i18nMiddleware);
     app.post("/login", limiter, (req, res) => {
         res.status(400).send("invalid");
     });

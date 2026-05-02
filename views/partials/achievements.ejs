@@ -1,29 +1,29 @@
 <section class="section achievements-section">
   <div class="container achievements-container">
     <div class="achievements-left">
-      <h2 class="achievements-secondary-heading">A task manager you can trust for life</h2>
-      <p>We’ve been building Todoist for 15 years and 169 days. <a href="#">We're in it for the long haul.</a></p>
+      <h2 class="achievements-secondary-heading"><%= t('achievements.heading') %></h2>
+      <p><%= t('achievements.intro') %> <a href="#"><%= t('achievements.longHaul') %></a></p>
     </div>
     <div class="achievements-right">
       <div class="achievements-achievement-card">
-        <img class="achievements-achievement-img" src="../../static/assets/achievement-1.webp" alt="achievement-1">
-        <h3 class="achievements-achievement-heading">300+</h3>
-        <p>App downloads</p>
+        <img class="achievements-achievement-img" src="../../static/assets/achievement-1.webp" alt="<%= t('achievements.card1Alt') %>">
+        <h3 class="achievements-achievement-heading"><%= t('achievements.card1Stat') %></h3>
+        <p><%= t('achievements.card1Label') %></p>
       </div>
       <div class="achievements-achievement-card">
-        <img class="achievements-achievement-img" src="../../static/assets/achievement-2.webp" alt="achievement-2">
-        <h3 class="achievements-achievement-heading">100+</h3>
-        <p>Tasks completed</p>
+        <img class="achievements-achievement-img" src="../../static/assets/achievement-2.webp" alt="<%= t('achievements.card2Alt') %>">
+        <h3 class="achievements-achievement-heading"><%= t('achievements.card2Stat') %></h3>
+        <p><%= t('achievements.card2Label') %></p>
       </div>
       <div class="achievements-achievement-card">
-        <img class="achievements-achievement-img" src="../../static/assets/achievement-3.webp" alt="achievement-3">
-        <h3 class="achievements-achievement-heading">160+</h3>
-        <p>Colleges</p>
+        <img class="achievements-achievement-img" src="../../static/assets/achievement-3.webp" alt="<%= t('achievements.card3Alt') %>">
+        <h3 class="achievements-achievement-heading"><%= t('achievements.card3Stat') %></h3>
+        <p><%= t('achievements.card3Label') %></p>
       </div>
       <div class="achievements-achievement-card">
-        <img class="achievements-achievement-img" src="../../static/assets/achievement-4.webp" alt="achievement-4">
-        <h3 class="achievements-achievement-heading">100+</h3>
-        <p>Pro users</p>
+        <img class="achievements-achievement-img" src="../../static/assets/achievement-4.webp" alt="<%= t('achievements.card4Alt') %>">
+        <h3 class="achievements-achievement-heading"><%= t('achievements.card4Stat') %></h3>
+        <p><%= t('achievements.card4Label') %></p>
       </div>
     </div>
   </div>

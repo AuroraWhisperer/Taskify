@@ -144,3 +144,23 @@
   width: 45px;
 }
 
+.dashboard-navbar-locale-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  white-space: nowrap;
+}
+
+.dashboard-navbar-locale-link:hover {
+  background: #eee;
+  text-decoration: none;
+  color: #111;
+}
+

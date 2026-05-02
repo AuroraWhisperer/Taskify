@@ -18,6 +18,8 @@ const securityHeaders = require("./middleware/securityHeaders");
 const { configureDatabaseUri, connectDatabase } = require("./db/conn");
 const { getPassword } = require("./utilities/validation");
 const { getSessionCookieOptions, validateEnvironment } = require("./utilities/config");
+const i18nMiddleware = require("./middleware/i18n");
+const { LOCALE_COOKIE, normalizeLocale, getSafeRedirectPath } = require("./utilities/i18n");
 
 const views_path = path.join(__dirname, "../views");
 const static_path = path.join(__dirname, "../static");
@@ -39,10 +41,10 @@ function createSessionConfig(options = {}) {
     return config;
 }
 
-function renderDashboardError(req, res, statusCode, error) {
+function renderDashboardError(req, res, statusCode, errorKey) {
     return res.status(statusCode).render("dashboard/dashboard.ejs", {
         username: req.session.username,
-        error
+        error: req.t(errorKey)
     });
 }
 
@@ -60,6 +62,25 @@ function createApp(options = {}) {
 
     app.use(session(createSessionConfig(options)));
     app.use(csrfProtection);
+    app.use(i18nMiddleware);
+
+    app.get("/set-locale", (req, res) => {
+        const lang = normalizeLocale(req.query.lang);
+        const target = lang === "zh" ? "zh" : "en";
+        const redirectTo = getSafeRedirectPath(
+            typeof req.query.redirect === "string" ? req.query.redirect : "/"
+        );
+
+        res.cookie(LOCALE_COOKIE, target, {
+            maxAge: 365 * 24 * 60 * 60 * 1000,
+            httpOnly: false,
+            sameSite: "lax",
+            path: "/",
+            secure: process.env.NODE_ENV === "production"
+        });
+
+        return res.redirect(redirectTo);
+    });
 
     app.set("view engine", "ejs");
     app.set("views", views_path);
@@ -106,7 +127,7 @@ function createApp(options = {}) {
                 reason: "missing_password",
                 userId
             });
-            return renderDashboardError(req, res, 400, "Please enter your password to delete the account.");
+            return renderDashboardError(req, res, 400, "account.delete_missing_password");
         }
 
         let user;
@@ -143,7 +164,7 @@ function createApp(options = {}) {
                 reason: "invalid_password",
                 userId
             });
-            return renderDashboardError(req, res, 400, "Password confirmation failed. Account was not deleted.");
+            return renderDashboardError(req, res, 400, "account.delete_bad_password");
         }
 
         try {

@@ -7,23 +7,25 @@
 
     <nav>
       <ul class="nav-items">
-        <li><a href="#">Features</a></li>
-        <li><a href="#">Templates</a></li>
-        <li><a href="#">For Teams</a></li>
-        <li><a href="#">Resources</a></li>
-        <li><a href="#">Pricing</a></li>
+        <li><a href="#"><%= t('nav.features') %></a></li>
+        <li><a href="#"><%= t('nav.templates') %></a></li>
+        <li><a href="#"><%= t('nav.forTeams') %></a></li>
+        <li><a href="#"><%= t('nav.resources') %></a></li>
+        <li><a href="#"><%= t('nav.pricing') %></a></li>
       </ul>
     </nav>
     <div class="nav-buttons">
       <% if (username) { %>
-        <a href="/dashboard" class="btn1 nav-btn">Dashboard</a>
+        <a href="/dashboard" class="btn1 nav-btn"><%= t('nav.dashboard') %></a>
         <form method="post" action="/logout" class="nav-logout-form">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-          <button type="submit" class="btn2 nav-btn">Log Out</button>
+          <button type="submit" class="btn2 nav-btn"><%= t('nav.logOut') %></button>
         </form>
+        <a href="<%= localeSwitchHref(localeOther) %>" class="nav-locale-switch nav-btn btn-locale" aria-label="<%= t('nav.localeAria') %>"><%= localeOtherLabel %></a>
       <% } else { %>
-        <a href="/signup" class="btn1 nav-btn">Sign Up</a>
-        <a href="/login" class="btn2 nav-btn">Log In</a>
+        <a href="/signup" class="btn1 nav-btn"><%= t('nav.signUp') %></a>
+        <a href="/login" class="btn2 nav-btn"><%= t('nav.logIn') %></a>
+        <a href="<%= localeSwitchHref(localeOther) %>" class="nav-locale-switch nav-btn btn-locale" aria-label="<%= t('nav.localeAria') %>"><%= localeOtherLabel %></a>
       <% } %>
     </div>
   </div>

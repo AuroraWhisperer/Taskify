@@ -145,3 +145,22 @@ a .nav-title:hover {
   color: var(--clr-light-white);
   background-color: var(--clr-grey);
 }
+.nav-locale-switch.btn-locale {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--btn-padding);
+  border-radius: 4px;
+  font-size: 16px;
+  color: var(--clr-text);
+  background-color: var(--clr-light-white);
+  border: 1px solid var(--clr-lightgrey);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease-in-out;
+}
+.nav-locale-switch.btn-locale:hover {
+  background-color: var(--clr-lightgrey);
+  color: var(--clr-text);
+  text-decoration: none;
+}
