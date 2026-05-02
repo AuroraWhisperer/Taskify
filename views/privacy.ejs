@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%= typeof htmlLang !== 'undefined' ? htmlLang : 'en' %>">
 
 <head>
   <meta charset="UTF-8" />
@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="../static/styles/partials/footer.css" />
   <link rel="stylesheet" href="../static/styles/partials/cookie-banner.css" />
   <link rel="stylesheet" href="../static/styles/privacy.css" />
-  <title>Privacy Policy - Taskify</title>
+  <title><%= t('privacy.metaTitle') %></title>
 </head>
 
 <body>
@@ -23,44 +23,44 @@
   <main id="main-content" class="privacy-page">
     <section class="privacy-hero" aria-labelledby="privacy-heading">
       <div class="privacy-container">
-        <p class="privacy-hero-eyebrow">Legal</p>
-        <h1 id="privacy-heading" class="privacy-hero-title">Privacy Policy</h1>
-        <p class="privacy-updated">Last updated: 30 April 2026</p>
+        <p class="privacy-hero-eyebrow"><%= t('privacy.eyebrow') %></p>
+        <h1 id="privacy-heading" class="privacy-hero-title"><%= t('privacy.heading') %></h1>
+        <p class="privacy-updated"><%= t('privacy.updated') %></p>
         <p class="privacy-lead">
-          How Taskify collects, uses, and protects personal information for this CPT304 coursework project (Express, EJS, MongoDB).
+          <%= t('privacy.lead') %>
         </p>
       </div>
     </section>
 
     <div class="privacy-container privacy-content">
-      <h2>Information we process</h2>
+      <h2><%= t('privacy.section.info.title') %></h2>
       <ul>
-        <li>Account data you submit (for example username and email).</li>
-        <li>Login/session data needed to keep you signed in securely.</li>
-        <li>Basic security logs (for example request time and IP) for abuse prevention.</li>
+        <li><%= t('privacy.section.info.item1') %></li>
+        <li><%= t('privacy.section.info.item2') %></li>
+        <li><%= t('privacy.section.info.item3') %></li>
       </ul>
 
-      <h2>How we use information</h2>
+      <h2><%= t('privacy.section.usage.title') %></h2>
       <p>
-        We use the information to provide account features, keep the service secure, and maintain the application.
+        <%= t('privacy.section.usage.body') %>
       </p>
 
-      <h2>Cookies</h2>
+      <h2><%= t('privacy.section.cookies.title') %></h2>
       <p>
-        Taskify uses essential cookies for session and security. Optional cookie choices are managed by the cookie banner.
+        <%= t('privacy.section.cookies.body') %>
       </p>
 
-      <h2>Your choices</h2>
+      <h2><%= t('privacy.section.choices.title') %></h2>
       <p>
-        You can stop using the service at any time. Where available, you can remove your account from the dashboard.
+        <%= t('privacy.section.choices.body') %>
       </p>
 
-      <h2>Contact</h2>
+      <h2><%= t('privacy.section.contact.title') %></h2>
       <p>
-        For coursework-related questions, contact the project team through your module communication channels.
+        <%= t('privacy.section.contact.body') %>
       </p>
 
-      <p class="privacy-back"><a href="/">← Back to home</a></p>
+      <p class="privacy-back"><a href="/"><%= t('privacy.backHome') %></a></p>
     </div>
   </main>
 
