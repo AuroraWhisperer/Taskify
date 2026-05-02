@@ -76,6 +76,10 @@ function createApp(options = {}) {
         res.status(200).render("signup.ejs", { error: null, showLogin: true });
     });
 
+    app.get("/privacy", (req, res) => {
+        res.status(200).render("privacy.ejs", { username: req.session.username || null });
+    });
+
     app.use(signupRouter);
     app.use(loginRouter);
 
