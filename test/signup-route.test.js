@@ -5,6 +5,7 @@ const express = require("express");
 const session = require("express-session");
 
 const csrfProtection = require("../src/middleware/csrf");
+const i18nMiddleware = require("../src/middleware/i18n");
 const { errorHandler } = require("../src/middleware/errorHandler");
 const { createSignupRouter, isDuplicateEmailError } = require("../src/routes/signup.route");
 
@@ -78,6 +79,7 @@ function createDuplicateEmailTestApp() {
         saveUninitialized: false
     }));
     app.use(csrfProtection);
+    app.use(i18nMiddleware);
 
     app.get("/signup", (req, res) => {
         res.status(200).render("signup", { error: null, showLogin: false });
@@ -120,7 +122,7 @@ test("duplicate email save race returns a signup form error", async () => {
             const html = await response.text();
 
             assert.equal(response.status, 400);
-            assert.match(html, /Signup could not be completed/);
+            assert.match(html, /This email is already registered|该邮箱已被注册/);
             assert.doesNotMatch(html, /The request could not be completed/);
         });
     } finally {
@@ -138,4 +140,18 @@ test("duplicate email helper recognizes Mongo duplicate key email errors", () =>
         keyPattern: { username: 1 }
     }), false);
     assert.equal(isDuplicateEmailError({ code: 121 }), false);
+    assert.equal(
+        isDuplicateEmailError({
+            code: 11000,
+            message: 'E11000 duplicate key error index: email_1 dup key: { email: "a@b.com" }'
+        }),
+        true
+    );
+    assert.equal(
+        isDuplicateEmailError({
+            code: 11000,
+            message: 'E11000 duplicate key error index: username_1 dup key: { username: "x" }'
+        }),
+        false
+    );
 });

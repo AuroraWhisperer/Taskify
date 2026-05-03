@@ -12,11 +12,16 @@ function isDuplicateEmailError(err) {
         return false;
     }
 
-    return Boolean(
-        err.keyPattern?.email ||
-        err.keyValue?.email ||
-        /email/i.test(String(err.message || ''))
-    );
+    if (err.keyPattern && Object.prototype.hasOwnProperty.call(err.keyPattern, 'email')) {
+        return true;
+    }
+
+    if (err.keyValue && typeof err.keyValue === 'object' && Object.prototype.hasOwnProperty.call(err.keyValue, 'email')) {
+        return true;
+    }
+
+    const msg = String(err.message || '');
+    return /\bdup key:\s*\{[^}]*\bemail\b/i.test(msg);
 }
 
 function getSignupFormData(req) {
@@ -26,14 +31,15 @@ function getSignupFormData(req) {
     };
 }
 
-function renderDuplicateEmail(req, res, emailHash) {
+function renderDuplicateEmail(req, res, emailHash, detail) {
     logSecurityEvent('signup_rejected', req, {
         reason: 'duplicate_email',
+        detail: detail || 'unknown',
         emailHash
     });
 
     return res.status(400).render('signup', {
-        error: 'Signup could not be completed. Please check your details and try again.',
+        error: req.t('signup.duplicateEmail'),
         showLogin: false,
         formData: getSignupFormData(req)
     });
@@ -43,7 +49,7 @@ function createSignupIpRateLimiter() {
     return createRateLimiter({
         windowMs: 30 * 60 * 1000,
         maxAttempts: 10,
-        message: 'Too many signup attempts. Please wait 30 minutes and try again.'
+        messageKey: 'rateLimit.signupIp'
     });
 }
 
@@ -51,7 +57,7 @@ function createSignupEmailRateLimiter() {
     return createRateLimiter({
         windowMs: 30 * 60 * 1000,
         maxAttempts: 5,
-        message: 'Too many signup attempts for this email. Please wait 30 minutes and try again.',
+        messageKey: 'rateLimit.signupEmail',
         keyGenerator: (req) => {
             const email = normalizeEmail(req.body?.SignUpEmail);
             return email ? `signup-email:${hashIdentifier(email)}` : null;
@@ -66,31 +72,55 @@ function createSignupRouter(options = {}) {
     const signupEmailRateLimiter = options.signupEmailRateLimiter || createSignupEmailRateLimiter();
 
     router.post('/signup', signupIpRateLimiter, signupEmailRateLimiter, asyncHandler(async (req, res) => {
-        const { error, values } = validateSignupInput(req.body);
+        const { errorKey, values } = validateSignupInput(req.body);
         const formData = getSignupFormData(req);
 
-        if (error) {
+        if (errorKey) {
             logSecurityEvent('signup_rejected', req, { reason: 'validation_failed' });
-            return res.status(400).render('signup', { error, showLogin: false, formData });
+            return res.status(400).render('signup', {
+                error: req.t(errorKey),
+                showLogin: false,
+                formData
+            });
         }
 
-        const emailHash = hashIdentifier(values.email);
-        const existing = await UserModel.findOne({ email: values.email });
+        const signupEmail = values && values.email;
+        const signupUsername = values && values.username;
+        const signupPassword = values && values.password;
+
+        if (
+            typeof signupEmail !== 'string' ||
+            typeof signupUsername !== 'string' ||
+            typeof signupPassword !== 'string' ||
+            !signupEmail ||
+            !signupUsername ||
+            !signupPassword
+        ) {
+            logSecurityEvent('signup_rejected', req, { reason: 'malformed_validated_payload' });
+            return res.status(400).render('signup', {
+                error: req.t('validation.all_fields_required'),
+                showLogin: false,
+                formData
+            });
+        }
+
+        const emailHash = hashIdentifier(signupEmail);
+        const existing = await UserModel.findOne({ email: signupEmail });
         if (existing) {
-            return renderDuplicateEmail(req, res, emailHash);
+            return renderDuplicateEmail(req, res, emailHash, 'email_already_in_database');
         }
 
         const user = new UserModel({
-            username: values.username,
-            email: values.email,
-            password: values.password
+            username: signupUsername,
+            email: signupEmail,
+            password: signupPassword
         });
 
         try {
             await user.save();
         } catch (err) {
             if (isDuplicateEmailError(err)) {
-                return renderDuplicateEmail(req, res, emailHash);
+                return renderDuplicateEmail(req, res, emailHash, 'unique_index_on_save');
             }
 
             throw err;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%= typeof htmlLang !== 'undefined' ? htmlLang : 'en' %>">
 
 <head>
   <meta charset="UTF-8" />
@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="../static/styles/partials/achievements.css" />
   <link rel="stylesheet" href="../static/styles/partials/footer.css" />
   <link rel="stylesheet" href="../static/styles/partials/cookie-banner.css" />
-  <title>Taskify</title>
+  <title><%= t('meta.appTitle') %></title>
 </head>
 
 <body>
@@ -38,6 +38,7 @@
   </main>
   <%-include("../views/partials/footer.ejs") %>
   <%- include("../views/partials/cookie-banner.ejs") %>
+  <script src="/static/js/site-header.js" defer></script>
   <script src="/static/js/cookie-banner.js" defer></script>
 
 

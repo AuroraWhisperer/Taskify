@@ -9,8 +9,10 @@ function renderSignupView(data) {
     return ejs.renderFile(signupViewPath, {
         csrfToken: "test_csrf_token",
         error: null,
+        htmlLang: "en",
         showLogin: false,
         formData: {},
+        t: (key) => key,
         ...data
     });
 }

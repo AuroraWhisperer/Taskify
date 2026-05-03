@@ -41,7 +41,7 @@ Nielsen and Molich's heuristic evaluation work frames timely, useful feedback as
 
 ### Implementation
 
-After merging the main authentication flow, login state is handled through the existing `showLogin` view flag and `auth-form.js` privacy guard. This branch keeps that model and adds `formData` only for signup correction, so failed signup submissions preserve normalized username and email. Login fields and all password fields remain empty.
+After merging the main authentication and i18n flow, login state is handled through the existing `showLogin` view flag and `auth-form.js` privacy guard. This branch keeps that model and adds `formData` only for signup correction, so failed signup submissions preserve normalized username and email while translated labels and placeholders continue to come from `t(...)`. Login fields and all password fields remain empty.
 
 ### Files Changed
 

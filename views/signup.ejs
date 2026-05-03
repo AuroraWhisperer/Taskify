@@ -1,7 +1,7 @@
 <% const isLoginView = typeof showLogin !== "undefined" && showLogin; %>
 <% const safeFormData = typeof formData === "object" && formData ? formData : {}; %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%= typeof htmlLang !== 'undefined' ? htmlLang : 'en' %>">
 
 <head>
   <meta charset="UTF-8" />
@@ -10,12 +10,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../static/styles/signup.css" />
   <link rel="stylesheet" href="../static/styles/partials/cookie-banner.css" />
-  <title><%= isLoginView ? "Login" : "SignUp" %></title>
+  <title><%= isLoginView ? t('meta.loginTitle') : t('meta.signupTitle') %></title>
 </head>
 
 <body>
   <section class="section signup-section">
-    <a href="/" class="auth-home-link" aria-label="Back to home">Taskify</a>
+    <a href="/" class="auth-home-link" aria-label="<%= t('auth.backHome') %>">Taskify</a>
     <div class="container signup-container">
       <div class="main <%= error ? "has-auth-error" : "" %>">
         <% if (error) { %>
@@ -26,40 +26,41 @@
         <div class="signup">
           <form method="post" action="/signup">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-            <label for="chk" aria-hidden="true">Sign up</label>
+            <label for="chk" aria-hidden="true"><%= t('auth.signUpTab') %></label>
             <div class="signup-username">
-              <input type="text" name="SignUpUsername" placeholder="User name" autocomplete="username" value="<%= safeFormData.signupUsername || "" %>" required="true" />
+              <input type="text" name="SignUpUsername" placeholder="<%= t('auth.placeholderUsername') %>" autocomplete="username" value="<%= safeFormData.signupUsername || "" %>" required="true" />
             </div>
             <div class="signup-email">
-              <input type="email" name="SignUpEmail" placeholder="Email" autocomplete="email" autocapitalize="none" spellcheck="false" value="<%= safeFormData.signupEmail || "" %>" required="true" />
+              <input type="email" name="SignUpEmail" placeholder="<%= t('auth.placeholderEmail') %>" autocomplete="email" autocapitalize="none" spellcheck="false" value="<%= safeFormData.signupEmail || "" %>" required="true" />
             </div>
             <div class="signup-password">
-              <input type="password" name="SignUpPassword" placeholder="Password" autocomplete="new-password" required="true" />
+              <input type="password" name="SignUpPassword" placeholder="<%= t('auth.placeholderPassword') %>" autocomplete="new-password" required="true" />
             </div>
             <div>
-              <input class="button" name="SignUpSubmit" type="submit" value="Sign up" />
+              <input class="button" name="SignUpSubmit" type="submit" value="<%= t('auth.submitSignUp') %>" />
             </div>
           </form>
         </div>
         <div class="login">
           <form method="post" action="/login" autocomplete="off" data-clear-on-load="true">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-            <label for="chk" aria-hidden="true">Login</label>
+            <label for="chk" aria-hidden="true"><%= t('auth.loginTab') %></label>
             <div class="signup-email">
-              <input type="email" name="LoginEmail" placeholder="Enter your email " autocomplete="off" autocapitalize="none" spellcheck="false" value="" readonly required="true" />
+              <input type="email" name="LoginEmail" placeholder="<%= t('auth.placeholderLoginEmail') %>" autocomplete="off" autocapitalize="none" spellcheck="false" value="" readonly required="true" />
             </div>
             <div class="signup-password">
-              <input type="password" name="LoginPassword" placeholder="Enter password" autocomplete="new-password" value="" readonly required="true" />
+              <input type="password" name="LoginPassword" placeholder="<%= t('auth.placeholderLoginPassword') %>" autocomplete="new-password" value="" readonly required="true" />
             </div>
             <!-- <button href="/auth">Log In</button> -->
             <div>
-              <input class="button" name="LoginSubmit" type="submit" value="Login" />
+              <input class="button" name="LoginSubmit" type="submit" value="<%= t('auth.submitLogin') %>" />
             </div>
           </form>
         </div>
       </div>
     </div>
   </section>
+  <p class="auth-legal-links"><a href="/privacy"><%= t('cookie.readPrivacyLink') %></a></p>
   <%- include("../views/partials/cookie-banner.ejs") %>
   <script src="/static/js/auth-form.js" defer></script>
   <script src="/static/js/cookie-banner.js" defer></script>

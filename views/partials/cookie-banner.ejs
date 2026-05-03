@@ -1,9 +1,10 @@
-<div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent banner">
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="<%= t('cookie.aria') %>">
   <p class="cookie-banner-text">
-    We use essential cookies to keep Taskify secure and working correctly. You can accept or reject optional cookies.
+    <%= t('cookie.text') %>
+    <%= t('cookie.readPrivacyPrefix') %> <a href="/privacy" class="cookie-banner-link"><%= t('cookie.readPrivacyLink') %></a><%= t('cookie.readPrivacySuffix') %>
   </p>
   <div class="cookie-banner-actions">
-    <button type="button" id="cookieRejectBtn" class="cookie-banner-btn cookie-banner-btn-secondary">Reject</button>
-    <button type="button" id="cookieAcceptBtn" class="cookie-banner-btn cookie-banner-btn-primary">Accept</button>
+    <button type="button" id="cookieRejectBtn" class="cookie-banner-btn cookie-banner-btn-secondary"><%= t('cookie.reject') %></button>
+    <button type="button" id="cookieAcceptBtn" class="cookie-banner-btn cookie-banner-btn-primary"><%= t('cookie.accept') %></button>
   </div>
 </div>

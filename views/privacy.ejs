@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="<%= typeof htmlLang !== 'undefined' ? htmlLang : 'en' %>">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../static/styles/main.css" />
+  <link rel="stylesheet" href="../static/styles/partials/nav.css" />
+  <link rel="stylesheet" href="../static/styles/partials/footer.css" />
+  <link rel="stylesheet" href="../static/styles/partials/cookie-banner.css" />
+  <link rel="stylesheet" href="../static/styles/privacy.css" />
+  <title><%= t('privacy.metaTitle') %></title>
+</head>
+
+<body>
+  <%- include("../views/partials/nav.ejs") %>
+
+  <main id="main-content" class="privacy-page">
+    <section class="privacy-hero" aria-labelledby="privacy-heading">
+      <div class="privacy-container">
+        <p class="privacy-hero-eyebrow"><%= t('privacy.eyebrow') %></p>
+        <h1 id="privacy-heading" class="privacy-hero-title"><%= t('privacy.heading') %></h1>
+        <p class="privacy-updated"><%= t('privacy.updated') %></p>
+        <p class="privacy-lead">
+          <%= t('privacy.lead') %>
+        </p>
+      </div>
+    </section>
+
+    <div class="privacy-container privacy-content">
+      <h2><%= t('privacy.section.info.title') %></h2>
+      <ul>
+        <li><%= t('privacy.section.info.item1') %></li>
+        <li><%= t('privacy.section.info.item2') %></li>
+        <li><%= t('privacy.section.info.item3') %></li>
+      </ul>
+
+      <h2><%= t('privacy.section.usage.title') %></h2>
+      <p>
+        <%= t('privacy.section.usage.body') %>
+      </p>
+
+      <h2><%= t('privacy.section.cookies.title') %></h2>
+      <p>
+        <%= t('privacy.section.cookies.body') %>
+      </p>
+
+      <h2><%= t('privacy.section.choices.title') %></h2>
+      <p>
+        <%= t('privacy.section.choices.body') %>
+      </p>
+
+      <h2><%= t('privacy.section.contact.title') %></h2>
+      <p>
+        <%= t('privacy.section.contact.body') %>
+      </p>
+
+      <p class="privacy-back"><a href="/"><%= t('privacy.backHome') %></a></p>
+    </div>
+  </main>
+
+  <%- include("../views/partials/footer.ejs") %>
+  <%- include("../views/partials/cookie-banner.ejs") %>
+  <script src="/static/js/site-header.js" defer></script>
+  <script src="/static/js/cookie-banner.js" defer></script>
+</body>
+
+</html>

@@ -41,6 +41,19 @@ body{
 .auth-home-link:hover {
 	color: #512d93;
 }
+.auth-legal-links {
+	position: fixed;
+	bottom: 24px;
+	left: 0;
+	right: 0;
+	text-align: center;
+	margin: 0;
+	font-size: 14px;
+}
+.auth-legal-links a {
+	color: #573b8a;
+	text-decoration: underline;
+}
 .main{
 	width: 350px;
 	height: 500px;

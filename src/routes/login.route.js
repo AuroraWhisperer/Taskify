@@ -11,14 +11,14 @@ const { regenerateSession } = require('../utilities/session');
 const loginIpRateLimiter = createRateLimiter({
     windowMs: 15 * 60 * 1000,
     maxAttempts: 15,
-    message: 'Too many login attempts. Please wait 15 minutes and try again.',
+    messageKey: 'rateLimit.loginIp',
     renderLocals: { showLogin: true }
 });
 
 const loginAccountRateLimiter = createRateLimiter({
     windowMs: 15 * 60 * 1000,
     maxAttempts: 10,
-    message: 'Too many login attempts for this account. Please wait 15 minutes and try again.',
+    messageKey: 'rateLimit.loginAccount',
     renderLocals: { showLogin: true },
     keyGenerator: (req) => {
         const email = normalizeEmail(req.body?.LoginEmail);
@@ -37,7 +37,7 @@ router.post('/login', loginIpRateLimiter, loginAccountRateLimiter, asyncHandler(
             reason: 'missing_credentials',
             emailHash
         });
-        return res.status(400).render('signup', { error: 'Please enter both email and password.', showLogin: true });
+        return res.status(400).render('signup', { error: req.t('login.missing_credentials'), showLogin: true });
     }
 
     const user = await User.findOne({ email });
@@ -46,7 +46,7 @@ router.post('/login', loginIpRateLimiter, loginAccountRateLimiter, asyncHandler(
             reason: 'invalid_credentials',
             emailHash
         });
-        return res.status(400).render('signup', { error: 'Email or password is incorrect.', showLogin: true });
+        return res.status(400).render('signup', { error: req.t('login.invalid_credentials'), showLogin: true });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -56,7 +56,7 @@ router.post('/login', loginIpRateLimiter, loginAccountRateLimiter, asyncHandler(
             emailHash,
             userId: String(user._id)
         });
-        return res.status(400).render('signup', { error: 'Email or password is incorrect.', showLogin: true });
+        return res.status(400).render('signup', { error: req.t('login.invalid_credentials'), showLogin: true });
     }
 
     await regenerateSession(req);

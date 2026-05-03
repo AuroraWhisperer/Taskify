@@ -2,23 +2,22 @@
   <div class="container hero-container">
     <div class="hero-col-text">
       <div>
-        <h1 class="hero-heading">One app to
-          replace them all</h1>
+        <h1 class="hero-heading"><%= t('hero.heading') %></h1>
 
       </div>
       <div class="hero-desc">
         <!-- Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat, explicabo. -->
       </div>
 
-      <input class="hero-input-email" type="email" name="email" id="hero-email" placeholder="Enter your email address" aria-label="Email address">
+      <input class="hero-input-email" type="email" name="email" id="hero-email" placeholder="<%= t('hero.emailPlaceholder') %>" aria-label="<%= t('hero.emailAria') %>">
 
-      <a href="#" class="hero-btn">Get Started</a>
+      <a href="#" class="hero-btn"><%= t('hero.getStarted') %></a>
     </div>
 
 
 
     <div class="hero-col-img">
-      <img class="hero-image" src="../../static/assets/laptop.png" alt="Taskify dashboard preview on a laptop">
+      <img class="hero-image" src="../../static/assets/laptop.png" alt="<%= t('hero.laptopAlt') %>">
 
     </div>
 
