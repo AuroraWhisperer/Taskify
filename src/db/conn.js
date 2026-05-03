@@ -2,11 +2,16 @@ const mongoose = require("mongoose");
 const readline = require("readline/promises");
 
 let selectedDatabase = null;
+const DEFAULT_LOCAL_MONGODB_URI = "mongodb://127.0.0.1:27017/taskify";
+
+function getLocalMongoUri(env = process.env) {
+    return env.LOCAL_MONGODB_URI || DEFAULT_LOCAL_MONGODB_URI;
+}
 
 const DATABASE_CHOICES = {
     local: {
         label: "local MongoDB",
-        uri: () => process.env.LOCAL_MONGODB_URI || "mongodb://localhost:27017/taskify"
+        uri: () => getLocalMongoUri()
     },
     cloud: {
         label: "MongoDB Atlas",
@@ -96,6 +101,8 @@ async function connectDatabase() {
 }
 
 module.exports = {
+    DEFAULT_LOCAL_MONGODB_URI,
     configureDatabaseUri,
-    connectDatabase
+    connectDatabase,
+    getLocalMongoUri
 };

@@ -4,7 +4,7 @@ const User = require('../models/user.model');
 const createRateLimiter = require('../middleware/rateLimit');
 const asyncHandler = require('../utilities/asyncHandler');
 const { hashIdentifier, logSecurityEvent } = require('../utilities/auditLogger');
-const { normalizeEmail, validateSignupInput } = require('../utilities/validation');
+const { normalizeEmail, normalizeUsername, validateSignupInput } = require('../utilities/validation');
 const { regenerateSession } = require('../utilities/session');
 
 function isDuplicateEmailError(err) {
@@ -24,6 +24,13 @@ function isDuplicateEmailError(err) {
     return /\bdup key:\s*\{[^}]*\bemail\b/i.test(msg);
 }
 
+function getSignupFormData(req) {
+    return {
+        signupUsername: normalizeUsername(req.body?.SignUpUsername),
+        signupEmail: normalizeEmail(req.body?.SignUpEmail)
+    };
+}
+
 function renderDuplicateEmail(req, res, emailHash, detail) {
     logSecurityEvent('signup_rejected', req, {
         reason: 'duplicate_email',
@@ -33,7 +40,8 @@ function renderDuplicateEmail(req, res, emailHash, detail) {
 
     return res.status(400).render('signup', {
         error: req.t('signup.duplicateEmail'),
-        showLogin: false
+        showLogin: false,
+        formData: getSignupFormData(req)
     });
 }
 
@@ -65,10 +73,15 @@ function createSignupRouter(options = {}) {
 
     router.post('/signup', signupIpRateLimiter, signupEmailRateLimiter, asyncHandler(async (req, res) => {
         const { errorKey, values } = validateSignupInput(req.body);
+        const formData = getSignupFormData(req);
 
         if (errorKey) {
             logSecurityEvent('signup_rejected', req, { reason: 'validation_failed' });
-            return res.status(400).render('signup', { error: req.t(errorKey), showLogin: false });
+            return res.status(400).render('signup', {
+                error: req.t(errorKey),
+                showLogin: false,
+                formData
+            });
         }
 
         const signupEmail = values && values.email;
@@ -86,7 +99,8 @@ function createSignupRouter(options = {}) {
             logSecurityEvent('signup_rejected', req, { reason: 'malformed_validated_payload' });
             return res.status(400).render('signup', {
                 error: req.t('validation.all_fields_required'),
-                showLogin: false
+                showLogin: false,
+                formData
             });
         }
 
@@ -127,4 +141,5 @@ function createSignupRouter(options = {}) {
 
 module.exports = createSignupRouter();
 module.exports.createSignupRouter = createSignupRouter;
+module.exports.getSignupFormData = getSignupFormData;
 module.exports.isDuplicateEmailError = isDuplicateEmailError;

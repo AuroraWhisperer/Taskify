@@ -1,4 +1,5 @@
 <% const isLoginView = typeof showLogin !== "undefined" && showLogin; %>
+<% const safeFormData = typeof formData === "object" && formData ? formData : {}; %>
 <!DOCTYPE html>
 <html lang="<%= typeof htmlLang !== 'undefined' ? htmlLang : 'en' %>">
 
@@ -18,7 +19,7 @@
     <div class="container signup-container">
       <div class="main <%= error ? "has-auth-error" : "" %>">
         <% if (error) { %>
-          <div class="auth-error"><%= error %></div>
+          <div class="auth-error" role="alert"><%= error %></div>
         <% } %>
         <input type="checkbox" id="chk" aria-hidden="true" <%= isLoginView ? "checked" : "" %> />
 
@@ -27,10 +28,10 @@
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <label for="chk" aria-hidden="true"><%= t('auth.signUpTab') %></label>
             <div class="signup-username">
-              <input type="text" name="SignUpUsername" placeholder="<%= t('auth.placeholderUsername') %>" autocomplete="username" required="true" />
+              <input type="text" name="SignUpUsername" placeholder="<%= t('auth.placeholderUsername') %>" autocomplete="username" value="<%= safeFormData.signupUsername || "" %>" required="true" />
             </div>
             <div class="signup-email">
-              <input type="email" name="SignUpEmail" placeholder="<%= t('auth.placeholderEmail') %>" autocomplete="email" autocapitalize="none" spellcheck="false" required="true" />
+              <input type="email" name="SignUpEmail" placeholder="<%= t('auth.placeholderEmail') %>" autocomplete="email" autocapitalize="none" spellcheck="false" value="<%= safeFormData.signupEmail || "" %>" required="true" />
             </div>
             <div class="signup-password">
               <input type="password" name="SignUpPassword" placeholder="<%= t('auth.placeholderPassword') %>" autocomplete="new-password" required="true" />

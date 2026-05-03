@@ -6,6 +6,9 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# macOS Finder metadata
+.DS_Store
+
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
@@ -105,3 +108,6 @@ dist
 
 
 deficiency-analysis.docx
+
+# Local coursework notes and private improvement records
+docs_local/
