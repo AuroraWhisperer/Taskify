@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node test/run-tests.js",
+    "coverage": "node --experimental-test-coverage --test-coverage-include=\"src/**/*.js\" --test-coverage-exclude=\"test/**/*.js\" --test-coverage-lines=80 test/run-tests.js",
+    "coverage:lcov": "node -e \"require('fs').mkdirSync('coverage',{recursive:true})\" && node --experimental-test-coverage --test-reporter=lcov --test-coverage-include=\"src/**/*.js\" --test-coverage-exclude=\"test/**/*.js\" --test-coverage-lines=80 test/run-tests.js > coverage/lcov.info",
     "start": "node src/app.js",
     "server": "nodemon src/app.js"
   },

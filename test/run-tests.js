@@ -1,6 +1,10 @@
+require("./app-routes.test");
+require("./audit-logger.test");
 require("./auth-view.test");
 require("./config.test");
 require("./db-config.test");
+require("./error-handler.test");
+require("./i18n.test");
 require("./security-middleware.test");
 require("./signup-route.test");
 require("./validation.test");

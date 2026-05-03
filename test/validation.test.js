@@ -56,3 +56,35 @@ test("normalizers handle non-string values safely", () => {
     assert.equal(normalizeUsername(null), "");
     assert.equal(normalizeEmail(undefined), "");
 });
+
+test("signup validation rejects missing and length-bounded fields", () => {
+    assert.equal(validateSignupInput({}).errorKey, "validation.all_fields_required");
+    assert.equal(validateSignupInput({
+        SignUpUsername: "Al",
+        SignUpEmail: "alice@example.com",
+        SignUpPassword: "pass1234"
+    }).errorKey, "validation.username_length");
+    assert.equal(validateSignupInput({
+        SignUpUsername: "A".repeat(31),
+        SignUpEmail: "alice@example.com",
+        SignUpPassword: "pass1234"
+    }).errorKey, "validation.username_length");
+});
+
+test("signup validation rejects unsupported password values", () => {
+    assert.equal(validateSignupInput({
+        SignUpUsername: "Alice",
+        SignUpEmail: "alice@example.com",
+        SignUpPassword: "pass\u0000word1"
+    }).errorKey, "validation.password_bad_chars");
+    assert.equal(validateSignupInput({
+        SignUpUsername: "Alice",
+        SignUpEmail: "alice@example.com",
+        SignUpPassword: "p1"
+    }).errorKey, "validation.password_short");
+    assert.equal(validateSignupInput({
+        SignUpUsername: "Alice",
+        SignUpEmail: "alice@example.com",
+        SignUpPassword: `${"a".repeat(72)}1`
+    }).errorKey, "validation.password_bytes");
+});

@@ -10,6 +10,7 @@
 <img src="https://img.shields.io/badge/Express.js-000000?style=flat&logo=express&logoColor=white">
 <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=flat&logo=mongodb&logoColor=white">
 <img src="https://img.shields.io/badge/EJS-B4CA65?style=flat">
+<a href="https://codecov.io/gh/AuroraWhisperer/Taskify"><img src="https://codecov.io/gh/AuroraWhisperer/Taskify/branch/main/graph/badge.svg" alt="Codecov coverage"></a>
 </p>
 
 ## Repository
@@ -180,7 +181,19 @@ Run the automated security checks:
 npm test
 ```
 
-The current tests cover signup validation, CSRF rejection, rate limiting, session cookie options, environment validation, duplicate-email signup races, and a MongoDB-backed signup/login persistence flow.
+Run the source-only coverage gate:
+
+```bash
+npm run coverage
+```
+
+Generate the lcov report used by Codecov:
+
+```bash
+npm run coverage:lcov
+```
+
+The current tests cover signup validation, CSRF rejection, rate limiting, session cookie options, environment validation, duplicate-email signup races, audit logging, locale handling, error handling, account deletion confirmation, and MongoDB-backed signup/login persistence flows. The coverage gate only includes `src/**/*.js` and fails when line coverage drops below 80%.
 
 ## Security review notes
 
