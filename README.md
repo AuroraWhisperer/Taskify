@@ -10,7 +10,7 @@
 <img src="https://img.shields.io/badge/Express.js-000000?style=flat&logo=express&logoColor=white">
 <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=flat&logo=mongodb&logoColor=white">
 <img src="https://img.shields.io/badge/EJS-B4CA65?style=flat">
-<a href="https://codecov.io/gh/AuroraWhisperer/Taskify"><img src="https://codecov.io/gh/AuroraWhisperer/Taskify/branch/main/graph/badge.svg" alt="Codecov coverage"></a>
+<a href="https://codecov.io/gh/DataFox0/Taskify"><img src="https://codecov.io/gh/DataFox0/Taskify/branch/main/graph/badge.svg" alt="Codecov coverage"></a>
 </p>
 
 ## Repository
