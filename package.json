@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DSCKGEC/Taskify.git"
+    "url": "git+https://github.com/DataFox0/Taskify.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DSCKGEC/Taskify/issues"
+    "url": "https://github.com/DataFox0/Taskify/issues"
   },
-  "homepage": "https://github.com/DSCKGEC/Taskify#readme",
+  "homepage": "https://github.com/DataFox0/Taskify#readme",
   "devDependencies": {
     "nodemon": "^2.0.19"
   },

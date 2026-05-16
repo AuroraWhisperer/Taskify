@@ -17,9 +17,7 @@
 
 <h3>Taskify</h3>
 
-Taskify is a task management system for everyday use. It is designed to help users create an account, sign in, and access a protected dashboard for managing their work.
-
-This version also includes several security updates, including CSRF protection, rate limiting on authentication routes, stricter input validation, security headers, and centralized error handling.
+Taskify is a task management system for everyday use. It is designed to help users create an account, sign in, and access a dashboard for managing their work.
 
 ## Project Goal
 
@@ -87,6 +85,9 @@ views/
   partials/
 
 docs/
+  baseline-standards.md
+  flaw-improvements.md
+  markup-structure.md
   security.md
 
 package.json
@@ -132,7 +133,7 @@ For local MongoDB, use this format:
 ```env
 PORT=3000
 DB_SOURCE=local
-LOCAL_MONGODB_URI=mongodb://localhost:27017/taskify
+LOCAL_MONGODB_URI=mongodb://127.0.0.1:27017/taskify
 SESSION_SECRET=replace_with_a_long_random_secret
 ```
 
@@ -149,33 +150,18 @@ Use your own MongoDB username, password, cluster address, and database name. Do 
 
 `DB_SOURCE=local` uses `LOCAL_MONGODB_URI`. `DB_SOURCE=cloud` uses `CLOUD_MONGODB_URI`. If `DB_SOURCE` is not set, the app asks you to choose local or cloud when it starts in an interactive terminal.
 
-## Security updates
-
-This version includes the following security-related changes:
-
-- CSRF tokens for signup, login, logout, and account deletion forms.
-- Logout changed from a GET link to a POST request.
-- Rate limiting on login and signup routes.
-- Server-side validation for username, email, and password.
-- Security headers, including Content Security Policy.
-- Centralized error handling and audit-style logging.
-
-For more details, see [docs/security.md](docs/security.md).
-
 ## Manual checks
 
 After starting the app, check these basic flows:
 
-- Sign up with a valid username, email, and password.
+- Sign up with valid account details.
 - Log out from the dashboard.
 - Log in again with the same account.
 - Try invalid signup values and confirm the form shows an error.
-- Submit a POST request without a CSRF token and confirm it returns `403`.
-- Repeat failed login attempts and confirm the route eventually returns `429`.
 
 ## Automated tests
 
-Run the automated security checks:
+Run the automated tests:
 
 ```bash
 npm test
@@ -193,28 +179,4 @@ Generate the lcov report used by Codecov:
 npm run coverage:lcov
 ```
 
-The current tests cover signup validation, CSRF rejection, rate limiting, session cookie options, environment validation, duplicate-email signup races, audit logging, locale handling, error handling, account deletion confirmation, and MongoDB-backed signup/login persistence flows. The coverage gate only includes `src/**/*.js` and fails when line coverage drops below 80%.
-
-## Security review notes
-
-For coursework reporting, the security work in this version should be treated as one specific deficiency:
-
-**Weak protection for account actions and related security controls.**
-
-It includes several related implementation controls: CSRF protection, login/signup rate limiting, centralized input validation, security headers, centralized error handling, audit logs, hardened session cookies, and password re-authentication for account deletion. These controls should be used as evidence for one security deficiency, not split into several separate deficiencies.
-
-The latest follow-up work also addresses the main items listed in `docs/security.md`:
-
-- Automated tests were added with Node's built-in test runner.
-- Startup validation rejects missing, weak, or default `SESSION_SECRET` values.
-- Session cookies use `httpOnly`, `sameSite: "lax"`, production-only `secure`, and a 24-hour expiry.
-- Rate limiting uses a MongoDB-backed shared store by default.
-- Account deletion requires password re-authentication.
-
-Remaining production review areas:
-
-- Keep `.env` private and use `.env.example` as the committed template.
-- Consider Redis for high-traffic rate limiting.
-- Consider `helmet` for standard security headers while keeping the custom CSP strict.
-
-See [docs/security.md](docs/security.md) for the detailed explanation and suggested next steps.
+The current tests cover route behavior, form validation, environment configuration, locale handling, error handling, and MongoDB-backed signup/login persistence flows. The coverage gate only includes `src/**/*.js` and fails when line coverage drops below 80%.
