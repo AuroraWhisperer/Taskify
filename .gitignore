@@ -106,8 +106,9 @@ dist
 # TernJS port file
 .tern-port
 
-
-deficiency-analysis.docx
+# documents
+*.doc
+*.docx
 
 # Local coursework notes and private improvement records
 docs_local/
